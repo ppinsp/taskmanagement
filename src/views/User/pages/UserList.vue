@@ -1,0 +1,133 @@
+<template>
+  <base-layout>
+    <v-row class="justify-end">
+      <v-col md="4" sm="6" cols="6">
+        <v-text-field v-model="searchText" dense label="Search" @keydown.enter="searchItem"/>
+      </v-col>
+      <v-col md="1" sm="2" cols="3" class="text-center">
+        <v-btn outlined small color="primary" @click="searchItem()">
+          Find
+        </v-btn>
+      </v-col>
+    </v-row>
+    <paginate
+      :page="parseInt(page)"
+      :per-page="perPage"
+      :total="total"
+      @on-page-change="changePage" />
+    <v-data-table
+      :headers="headers"
+      :items-per-page="15"
+      :items="data"
+      disable-sort
+      hide-default-footer
+      class="elevation-1">
+  </v-data-table>
+  </base-layout>
+</template>
+
+<script>
+  export default {
+    data: () => ({
+      searchText: '',
+      perPage: 15,
+      total: 15,
+      page: 1,
+      data: [
+        {
+          name: 'Frozen Yogurt',
+          calories: 159,
+          fat: 6.0,
+          carbs: 24,
+          protein: 4.0,
+          iron: '1%',
+        },
+        {
+          name: 'Ice cream sandwich',
+          calories: 237,
+          fat: 9.0,
+          carbs: 37,
+          protein: 4.3,
+          iron: '1%',
+        },
+        {
+          name: 'Eclair',
+          calories: 262,
+          fat: 16.0,
+          carbs: 23,
+          protein: 6.0,
+          iron: '7%',
+        },
+        {
+          name: 'Cupcake',
+          calories: 305,
+          fat: 3.7,
+          carbs: 67,
+          protein: 4.3,
+          iron: '8%',
+        },
+        {
+          name: 'Gingerbread',
+          calories: 356,
+          fat: 16.0,
+          carbs: 49,
+          protein: 3.9,
+          iron: '16%',
+        },
+        {
+          name: 'Jelly bean',
+          calories: 375,
+          fat: 0.0,
+          carbs: 94,
+          protein: 0.0,
+          iron: '0%',
+        },
+        {
+          name: 'Lollipop',
+          calories: 392,
+          fat: 0.2,
+          carbs: 98,
+          protein: 0,
+          iron: '2%',
+        },
+        {
+          name: 'Honeycomb',
+          calories: 408,
+          fat: 3.2,
+          carbs: 87,
+          protein: 6.5,
+          iron: '45%',
+        },
+        {
+          name: 'Donut',
+          calories: 452,
+          fat: 25.0,
+          carbs: 51,
+          protein: 4.9,
+          iron: '22%',
+        },
+        {
+          name: 'KitKat',
+          calories: 518,
+          fat: 26.0,
+          carbs: 65,
+          protein: 7,
+          iron: '6%',
+        },
+      ],
+      headers: [
+        {
+          text: 'Dessert (100g serving)',
+          align: 'start',
+          sortable: false,
+          value: 'name',
+        },
+        { text: 'Calories', value: 'calories' },
+        { text: 'Fat (g)', value: 'fat' },
+        { text: 'Carbs (g)', value: 'carbs' },
+        { text: 'Protein (g)', value: 'protein' },
+        { text: 'Iron (%)', value: 'iron' },
+      ]
+    })
+  }
+</script>
