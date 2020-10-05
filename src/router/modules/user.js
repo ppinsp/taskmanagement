@@ -8,17 +8,17 @@ export default {
       component: () => import('@/views/User/pages/UserList.vue'),
     },
     {
-      path: '/CreateAc',
+      path: 'create',
       name: 'CreateAccount',
       component: () => import('@/views/User/pages/CreatAccount.vue'),
     },
     {
-      path: '/UpdateAc',
+      path: ':id/update',
       name: 'UpdateAccount',
       component: () => import('@/views/User/pages/UpdateAccount.vue'),
     },
     {
-      path: '/userDetail',
+      path: ':id/detail',
       name: 'userDetail',
       component: () => import('@/views/User/pages/UserDetail.vue'),
     },

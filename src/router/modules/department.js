@@ -8,12 +8,12 @@ export default {
       component: () => import('@/views/Department/pages/DepartmentList.vue'),
     },
     {
-      path: '/createDepartment',
+      path: 'create',
       name: 'CreatDepartment',
       component: () => import('@/views/Department/pages/CreateDepartment.vue'),
     },
     {
-      path: '/updateDepartment',
+      path: ':id/update',
       name: 'UpdateDepartment',
       component: () => import('@/views/Department/pages/UpdateDepartment.vue'),
     },

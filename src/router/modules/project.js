@@ -8,17 +8,17 @@ export default {
       component: () => import('@/views/Project/pages/ProjectList.vue'),
     },
     {
-      path: '/createProject',
+      path: '/create',
       name: 'CreateProject',
       component: () => import('@/views/Project/pages/CreateProject.vue'),
     },
     {
-      path: '/projectDetail',
+      path: '/:id/detail',
       name: 'ProjectDetail',
       component: () => import('@/views/Project/pages/ProjectDetail.vue'),
     },
     {
-      path: '/updateProject',
+      path: '/:id/update',
       name: 'UpdateProject',
       component: () => import('@/views/Project/pages/UpdateProject.vue'),
     },

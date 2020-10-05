@@ -8,17 +8,17 @@ export default {
       component: () => import('@/views/Team/pages/TeamList.vue'),
     },
     {
-      path: '/createTeam',
+      path: '/create',
       name: 'CreateTeam',
       component: () => import('@/views/Team/pages/CreateTeam.vue'),
     },
     {
-      path: '/updateTeam',
+      path: '/:id/update',
       name: 'UpdateTeam',
       component: () => import('@/views/Team/pages/UpdateTeam.vue'),
     },
     {
-      path: '/teamDetail',
+      path: '/:id/detail',
       name: 'TeamDetail',
       component: () => import('@/views/Team/pages/TeamDetail.vue'),
     },
