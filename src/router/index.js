@@ -16,7 +16,7 @@ import UpdateProject from './modules/project'
 import Department from './modules/department'
 import CreatDepartment from './modules/department'
 import UpdateDepartment from './modules/department'
-
+import auth from '@/assets/js/Auth'
 
 Vue.use(VueRouter)
 
@@ -41,25 +41,29 @@ const routes = [
       Department,
       CreatDepartment,
       UpdateDepartment
-      
     ]
-
   },
   {
-    path: '/singIn',
-    name: 'SingIn',
-    component: () => import('@/views/SingIn/pages/SingIn.vue'),
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/Login/pages/SingIn.vue')
   },
   {
-  path: '/forgotPassword',
-  name: 'ForgotPassword',
-  component: () => import('@/views/SingIn/pages/ForgotPassword.vue'),
+    path: '/forgot-password',
+    name: 'ForgotPassword',
+    component: () => import('@/views/Login/pages/ForgotPassword.vue')
   },
   {
-    path: '/resetPassword',
+    path: '/reset-password',
     name: 'ResetPassword',
-    component: () => import('@/views/SingIn/pages/ResetPassword.vue'),
-    },
+    component: () => import('@/views/Login/pages/ResetPassword.vue')
+  }
+]
+
+const publicRoute = [
+  'Login',
+  'ForgotPassword',
+  'ResetPassword'
 ]
 
 const router = new VueRouter({
@@ -67,5 +71,23 @@ const router = new VueRouter({
   base: process.env.BASE_URL,
   routes
 })
-
+router
+.beforeEach((to, from, next) => {
+  const routeName = to.name
+  if (publicRoute.some(pr => pr === routeName)) {
+    next()
+  } else {
+    const data = auth.getAuthDecode()
+    if (data && ((data.exp - 1800) * 1000) <= new Date().getTime()) {
+      next({
+        name: 'Login'
+      })
+    } else if (data === null) {
+      next({
+        name: 'Login'
+      })
+    }
+  }
+  next()
+})
 export default router

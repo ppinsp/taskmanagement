@@ -1,5 +1,11 @@
 <template>
   <div>
+    <v-snackbar
+      v-model="snackbar.active"
+      :color="snackbar.type"
+      multi-line="multi-line"
+      :timeout="500"
+      top />
     <header-bar
       v-model="drawer"
       :window-width="windowWidth"
@@ -19,6 +25,7 @@
 <script>
 import sidebarMenu from '@/components/SidebarMenu'
 import headerBar from '@/components/HeaderBar'
+import { mapGetters } from 'vuex'
 export default {
   components: {
     sidebarMenu,
@@ -54,6 +61,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters({
+      snackbar: 'Style/snackbar'
+    }),
     windowWidth () {
       return this.$vuetify.breakpoint.width
     },

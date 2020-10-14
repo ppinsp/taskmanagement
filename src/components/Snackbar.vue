@@ -11,7 +11,6 @@
       color="#ffffff">
       {{ icon }}
     </v-icon>
-    <!-- eslint-disable-next-line vue/no-v-html -->
     <span v-html="message" />
   </v-snackbar>
 </template>
@@ -26,7 +25,7 @@ export default {
     type: {
       type: String,
       required: false,
-      default: undefined
+      default: 'success'
     },
     message: {
       type: String,

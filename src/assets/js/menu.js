@@ -18,26 +18,22 @@ export default {
     {
       title: 'Project',
       to: '/project',
-      icon: 'mdi-layers-triple 1'
+      icon: 'mdi-layers-triple'
     },
     {
       title: 'Task',
       to: '',
-      icon: 'mdi-weather-tornado 1'
+      icon: 'mdi-weather-tornado'
     },
     {
       title: 'Sprint Backlog',
       to: '',
-      icon: 'mdi-content-duplicate 1'
+      icon: 'mdi-content-duplicate'
     },
     {
       title: 'Time Report',
       to: '',
-      icon: 'mdi-clock-outline 1'
-    },
-
-
-
-
+      icon: 'mdi-clock-outline'
+    }
   ]
 }
