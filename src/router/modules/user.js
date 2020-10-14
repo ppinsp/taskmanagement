@@ -1,9 +1,9 @@
 export default {
-  path: '/user',
+  path: 'user',
   component: () => import('@/views/User/index.vue'),
   children: [
     {
-      path: '/',
+      path: '',
       name: 'UserList',
       component: () => import('@/views/User/pages/UserList.vue'),
     },
