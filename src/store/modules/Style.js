@@ -7,7 +7,7 @@ const state = {
 }
 
 const actions = {
-  setSnackBar ({ commit }, payload) {
+  setSnackbar ({ commit }, payload) {
     commit('SET_SNACKBAR', payload)
   }
 }

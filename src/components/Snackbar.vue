@@ -34,7 +34,7 @@ export default {
     timeout: {
       type: Number,
       required: false,
-      default: 3000
+      default: 4000
     }
   },
   data () {

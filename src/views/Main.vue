@@ -19,17 +19,25 @@
     <v-main>
       <router-view />
     </v-main>
+    <snackbar
+      :value="snackbar.active"
+      :type="snackbar.type"
+      :message="snackbar.message"
+      @close="setSnackbarData"/>
   </div>
 </template>
 
 <script>
 import sidebarMenu from '@/components/SidebarMenu'
 import headerBar from '@/components/HeaderBar'
-import { mapGetters } from 'vuex'
+import Snackbar from '@/components/Snackbar'
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   components: {
     sidebarMenu,
-    headerBar
+    headerBar,
+    Snackbar
   },
   data () {
     return {
@@ -41,7 +49,20 @@ export default {
       ready: false
     }
   },
+  mounted () {
+    console.log(this.snackbar)
+  },
   methods: {
+    ...mapActions({
+      setSnackbar: 'Style/setSnackbar'
+    }),
+    setSnackbarData (val) {
+      this.setSnackbar({
+        message: '',
+        type: '',
+        active: val
+      })
+    },
     getBreadcrumbs (data, value) {
       let newData = []
       for (let i = 0; i < data.length; i++) {
