@@ -90,7 +90,7 @@ export default {
       this.page = page
       this.getData()
     },
-    find () {
+    searchItem () {
       this.page = 1
       this.getData()
     },
