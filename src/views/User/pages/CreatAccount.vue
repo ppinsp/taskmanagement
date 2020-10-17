@@ -80,6 +80,26 @@
             outlined></v-select>
         </v-col>
       </v-row>
+      <v-row v-if="formData.photo !== null">
+        <v-col class="d-flex flex-column align-center justify-center" cols="12" md="8">
+          <img :src="formData.photo" width="300" alt="">
+          <div>
+            <v-btn class="mt-4" color="pink" @click="removeImage">Remove</v-btn>
+          </div>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col class="d-flex" cols="12" md="8">
+          <v-file-input
+            outlined
+            accept="image/*"
+            label="Image"
+            v-model="image"
+            @change="uploadImage()"
+            truncate-length="15"
+          ></v-file-input>
+        </v-col>
+      </v-row>
       <v-row v-if="!isUpdating">
         <v-col cols="12" md="8">
           <v-btn block color="primary" :loading="loading" @click="createUser">Save</v-btn>
@@ -108,12 +128,14 @@
 <script>
 import UserProvider from '@/resources/UserProvider'
 import ModalConfirm from '@/components/ModalConfirm'
+import { uploadToBucket } from '@/assets/js/S3'
 import { mapActions } from 'vuex'
 const userService = new UserProvider()
 export default {
   components: { ModalConfirm },
   data: () => ({
     loading: false,
+    image: null,
     modalConfirm: false,
     titles: [],
     valid: false,
@@ -125,7 +147,8 @@ export default {
       email: '',
       phoneNumber: '',
       username: '',
-      department: ''
+      department: '',
+      photo: null
     },
     validation: {
       title: [
@@ -173,6 +196,21 @@ export default {
     confirmRemove () {
       this.modalConfirm = true
     },
+    removeImage () {
+      this.formData.photo = null
+      this.image = null
+    },
+    async uploadImage () {
+      this.loading = true
+      if (this.image) {
+        const fileName = this.image.name.split('.')
+        const url = await uploadToBucket(this.image, fileName[1])
+        this.formData.photo = url
+      } else {
+        this.formData.photo = null
+      }
+      this.loading = false
+    },
     async getUser () {
       try {
         const { data } = await userService.getUserById(this.userId)
@@ -183,7 +221,8 @@ export default {
           email: data.email,
           phoneNumber: data.phoneNumber,
           username: data.username,
-          department: data.department.id
+          department: data.department.id,
+          photo: data.photo
         }
       } catch (err) {
         this.setSnackbar({

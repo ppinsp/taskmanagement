@@ -9,7 +9,7 @@ export default {
     },
     {
       path: 'create',
-      name: 'CreatDepartment',
+      name: 'CreateDepartment',
       component: () => import('@/views/Department/pages/CreateDepartment.vue'),
     },
     {

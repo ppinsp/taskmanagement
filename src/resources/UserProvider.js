@@ -55,4 +55,29 @@ export default class UserProvider extends HttpRequest {
     this.setHeader(getAuthToken())
     return this.delete(`/departments?id=${id}`)
   }
+
+  getAllTeam (query) {
+    this.setHeader(getAuthToken())
+    return this.get(`/teams?${query}`)
+  }
+
+  getTeamById (id) {
+    this.setHeader(getAuthToken())
+    return this.get(`/teams/${id}`)
+  }
+
+  createTeam (payload) {
+    this.setHeader(getAuthToken())
+    return this.post(`/teams`, payload)
+  }
+
+  updateTeam (id, payload) {
+    this.setHeader(getAuthToken())
+    return this.put(`/teams/${id}`, payload)
+  }
+
+  deleteTeam (id) {
+    this.setHeader(getAuthToken())
+    return this.delete(`/teams?id=${id}`)
+  }
 }

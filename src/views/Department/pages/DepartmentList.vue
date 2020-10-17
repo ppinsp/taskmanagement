@@ -2,7 +2,7 @@
   <base-layout>
     <v-row class="justify-space-between">
       <v-col md="4" cols="4">
-        <v-btn outlined small color="primary" @click="$router.push({ name: 'CreatDepartment' })">
+        <v-btn outlined small color="primary" @click="$router.push({ name: 'CreateDepartment' })">
           <v-icon class="mr-1">mdi-plus</v-icon> Add
         </v-btn>
       </v-col>
