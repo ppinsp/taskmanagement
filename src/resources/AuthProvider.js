@@ -7,4 +7,17 @@ export default class AuthProvider extends HttpRequest {
       password
     })
   }
+
+  changePassword (password, token) {
+    return this.post('/users/change-password', {
+      password,
+      token
+    })
+  }
+
+  resetPassword (username) {
+    return this.post('/users/reset-password', {
+      username
+    })
+  }
 }

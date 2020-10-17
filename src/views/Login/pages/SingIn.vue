@@ -28,7 +28,7 @@
             @click:append="show = !show"
             outlined
           />
-          <div class="text-right">forget Password?</div>
+          <div class="text-right cursor-pointer" @click="$router.push({ name: 'ForgotPassword'})">forget Password?</div>
         </v-col>
       </v-row>
       <v-row>
@@ -94,3 +94,9 @@ export default {
   }
 }
 </script>
+
+<style lang="css" scoped>
+.cursor-pointer {
+  cursor: pointer;
+}
+</style>

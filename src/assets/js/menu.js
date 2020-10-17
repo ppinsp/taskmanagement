@@ -20,20 +20,20 @@ export default {
       to: '/project',
       icon: 'mdi-layers-triple'
     },
-    {
-      title: 'Task',
-      to: '',
-      icon: 'mdi-weather-tornado'
-    },
-    {
-      title: 'Sprint Backlog',
-      to: '',
-      icon: 'mdi-content-duplicate'
-    },
-    {
-      title: 'Time Report',
-      to: '',
-      icon: 'mdi-clock-outline'
-    }
+    // {
+    //   title: 'Task',
+    //   to: '',
+    //   icon: 'mdi-weather-tornado'
+    // },
+    // {
+    //   title: 'Sprint Backlog',
+    //   to: '',
+    //   icon: 'mdi-content-duplicate'
+    // },
+    // {
+    //   title: 'Time Report',
+    //   to: '',
+    //   icon: 'mdi-clock-outline'
+    // }
   ]
 }

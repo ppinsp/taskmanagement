@@ -4,7 +4,7 @@ export default {
   children: [
     {
       path: '/',
-      name: 'Department',
+      name: 'DepartmentList',
       component: () => import('@/views/Department/pages/DepartmentList.vue'),
     },
     {
@@ -15,8 +15,12 @@ export default {
     {
       path: ':id/update',
       name: 'UpdateDepartment',
-      component: () => import('@/views/Department/pages/UpdateDepartment.vue'),
+      component: () => import('@/views/Department/pages/CreateDepartment.vue'),
     },
-
+    {
+      path: ':id/detail',
+      name: 'DepartmentDetail',
+      component: () => import('@/views/Department/pages/DepartmentDetail.vue'),
+    }
   ]
 }

@@ -49,9 +49,6 @@ export default {
       ready: false
     }
   },
-  mounted () {
-    console.log(this.snackbar)
-  },
   methods: {
     ...mapActions({
       setSnackbar: 'Style/setSnackbar'

@@ -38,7 +38,7 @@
     <modal-confirm
       :active="modalConfirm"
       :confirm-text="`Confirm`"
-      :title="'Confirm delete.'"
+      :title="'Confirm delete'"
       :message="`Confirm delete user ${user.username}.`"
       :show-cancel="true"
       @onCancel="() => { modalConfirm = false }"
