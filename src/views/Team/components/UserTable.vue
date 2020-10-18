@@ -1,12 +1,7 @@
 <template>
-  <base-layout>
+  <div>
     <v-row class="justify-space-between">
-      <v-col md="4" cols="4">
-        <v-btn outlined small color="primary" @click="$router.push({ name: 'CreateProject' })">
-          <v-icon class="mr-1">mdi-plus</v-icon> Add
-        </v-btn>
-      </v-col>
-      <v-col class="row" md="6" cols="8">
+      <v-col class="row" >
         <v-col md="9" cols="8">
           <v-text-field v-model="searchText" dense label="Search" @keydown.enter="searchItem"/>
         </v-col>
@@ -25,37 +20,29 @@
     <v-data-table
       :headers="headers"
       :items-per-page="15"
-      :items="mapData"
+      :items="mapedData"
       :loading="loading"
       disable-sort
       hide-default-footer
       class="elevation-1">
-      <template v-slot:[`item.option`]="{ item }">
-        <v-menu>
-          <template v-slot:activator="{ on, attrs }">
-            <v-icon v-bind="attrs" v-on="on">
-              mdi-dots-vertical
-            </v-icon>
-          </template>
-          <v-list>
-            <v-list-item @click="$router.push({ name: 'ProjectDetail', params: { id: item.id }})">
-              <v-list-item-title>Detail</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="$router.push({ name: 'UpdateProject', params: { id: item.id }})">
-              <v-list-item-title>Edit</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
+      <template v-slot:[`item.add`]="{ item }">
+        <v-icon v-if="!disableAddBtn(item)" @click="addItem(item)">mdi-plus</v-icon>
       </template>
-  </v-data-table>
-  </base-layout>
+    </v-data-table>
+  </div>
 </template>
 
 <script>
-import ProjectProvider from '@/resources/ProjectProvider'
+import UserProvider from '@/resources/UserProvider'
 
-const projectService = new ProjectProvider()
+const userService = new UserProvider()
 export default {
+  props: {
+    validUsers: {
+      type: Array,
+      default: () => []
+    }
+  },
   data: () => ({
     searchText: '',
     loading: false,
@@ -65,23 +52,31 @@ export default {
     data: [],
     headers: [
       { text: 'Id', align: 'start', sortable: false, value: 'id' },
+      { text: 'Username', value: 'username' },
       { text: 'Name', value: 'name' },
-      { text: 'Team', value: 'teamName' },
-      { text: 'Detail', value: 'detail' },
-      { text: 'option', value: 'option', width: 40, align: 'center' }
+      { text: 'Department', value: 'department' },
+      { text: 'Add', value: 'add' }
     ]
   }),
   computed: {
-    mapData () {
+    mapedData () {
       return this.data.map(d => ({
         id: d.id,
-        name: d.name,
-        detail: d.detail,
-        teamName: d.team ? d.team.name : ''
+        username: d.username,
+        name: `${d.firstName} ${d.lastName}`,
+        email: d.email,
+        department: d.department.name,
+        phoneNumber: d.phoneNumber
       }))
     }
   },
   methods: {
+    disableAddBtn (user) {
+      return this.validUsers.some(u => u.id === user.id)
+    },
+    addItem (val) {
+      this.$emit('onAddUser', val)
+    },
     changePage (page) {
       this.page = page
       this.getData()
@@ -94,7 +89,7 @@ export default {
       this.loading = true
       try {
         const query = `page=${this.page}&limit=${this.perPage}&search=${this.searchText}`
-        const { data } = await projectService.getAllProject(query)
+        const { data } = await userService.getUser(query)
         this.total = data.count
         this.data = data.results
       } catch (err) {

@@ -29,7 +29,7 @@
         </v-col>
       </v-row>
       <v-row v-if="!isUpdating">
-        <v-col cols="2" md="6">
+        <v-col cols="12" md="6">
           <div class="text-center">
             <v-btn
               block

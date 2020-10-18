@@ -1,116 +1,357 @@
 <template>
   <v-container>
-    <v-form>
+    <v-form ref="form" v-model="valid" :lazy-validation="false">
       <v-row>
-        <v-col cols="12" sm="6">
-          <div>
-            <h1>Creat New Project</h1>
-          </div>
+        <v-col cols="12">
+          <h1 v-if="isUpdating">Update Project</h1>
+          <h1 v-else>Create Project</h1>
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" sm="6">
+        <v-col cols="12" md="6">
           <v-text-field
-            label="Project name"
+            label="Name"
+            v-model="formData.name"
+            :rules="validation.name"
             persistent-hint
             outlined
           ></v-text-field>
         </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="6" class="my-n8">
-            <v-textarea
-              outlined
-              name="input-7-4"
-              label="Project detail"
-            ></v-textarea>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="d-flex" cols="12" sm="3" >
-          <v-select
-            :items="items"
-            label="Team"
+      </v-row>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-text-field
+            label="Detail"
+            v-model="formData.detail"
+            persistent-hint
             outlined
-          ></v-select>
+          ></v-text-field>
         </v-col>
-
-        <v-col cols="12" sm="6" md="3" >
-      <v-menu
-            v-model="menu2"
+      </v-row>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-menu
+            v-model="activeDate"
             :close-on-content-click="false"
             :nudge-right="40"
             transition="scale-transition"
             offset-y
-            min-width="290px"
-          >
-          <template v-slot:activator="{ on, attrs }">
-            <v-text-field
-              v-model="date"
-              label="Deadline Date"
-              prepend-icon="mdi-calendar"
-              readonly
-              v-bind="attrs"
-              v-on="on"
-            ></v-text-field>
-          </template>
-          <v-date-picker
-            v-model="date2"
-            @input="menu2 = false"
-          ></v-date-picker>
-      </v-menu>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" md="6" class="my-n8">
-          <v-textarea
-            outlined
-            name="input-7-4"
-            label="Requirement"
-          ></v-textarea>
+            min-width="290px">
+            <template v-slot:activator="{ on, attrs }">
+              <v-text-field
+                v-model="formData.deadlineDate"
+                label="Deadline Date"
+                prepend-icon="mdi-calendar"
+                readonly
+                outlined
+                v-bind="attrs"
+                v-on="on"
+              ></v-text-field>
+            </template>
+            <v-date-picker
+              v-model="formData.deadlineDate"
+              @input="activeDate = false"
+            ></v-date-picker>
+          </v-menu>
         </v-col>
-        </v-row>
-        <v-row>
-          <v-col cols="12" sm="4">
-          <v-file-input
-              show-size
-              counter
-              multiple
-              label="File input"
-          ></v-file-input>
-          </v-col>
-          <v-col cols="9" sm="3" class="my-3">
-          <div class="text-center">
-            <v-btn rounded color="brown lighten-2" dark>Add</v-btn>
+      </v-row>
+      <v-row>
+        <v-col cols="12" md="6">
+          <v-select
+            v-model="formData.team"
+            :rules="validation.team"
+            :items="teams"
+            item-text="name"
+            item-value="id"
+            label="Team"
+            outlined></v-select>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12" md="6" class="box">
+          <h2> Requirement </h2>
+          <div v-for="(requirement, index) in formData.requirements" :key="index">
+            <v-row>
+              <v-col cols="1 mt-2 text-center">
+                <h3>{{ index + 1 }}</h3>
+              </v-col>
+              <v-col cols="10">
+                <v-text-field
+                  label="Detail"
+                  :rules="validation.requirementDetail"
+                  dense
+                  v-model="formData.requirements[index].detail"
+                  persistent-hint
+                  outlined />
+                <div class="d-flex ma-4 justify-center  " v-if="formData.requirements[index].imageUpload !== null">
+                  <img :src="formData.requirements[index].imageUpload" width="200" alt="">
+                </div>
+                <v-file-input
+                  outlined
+                  accept="image/*"
+                  label="Image"
+                  dense
+                  v-model="formData.requirements[index].image"
+                  @change="(file) => { uploadFile(file, 'imageUpload', index) }"
+                  truncate-length="15"
+                ></v-file-input>
+                <div class="d-flex ma-4 justify-center  " v-if="formData.requirements[index].fileUpload !== null">
+                  {{ formData.requirements[index].fileUpload }}
+                </div>
+                <v-file-input
+                  outlined
+                  accept="image/*"
+                  label="File"
+                  dense
+                  v-model="formData.requirements[index].file"
+                  @change="(file) => { uploadFile(file, 'fileUpload', index) }"
+                  truncate-length="15"
+                ></v-file-input>
+
+              </v-col>
+              <v-col cols="1 mt-2 text-center">
+                <v-icon @click="removeRequirement(index)">mdi-delete-outline</v-icon>
+              </v-col>
+            </v-row>
+          </div>
+          <div>
+            <v-btn
+              color="light-green"
+              @click="addRequirement"
+              :loading="loading"
+              block>
+              +
+            </v-btn>
           </div>
         </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="px-16"
-      cols="12"
-        sm="6">
+      </v-row>
+      <v-row v-if="!isUpdating">
+        <v-col cols="12" md="6">
           <div class="text-center">
-            <v-btn  block color="primary" dark>Save</v-btn>
+            <v-btn
+              block
+              :loading="loading"
+              @click="createProject()"
+              color="primary">
+              Save
+            </v-btn>
           </div>
         </v-col>
-        </v-row>
-        
+      </v-row>
+      <v-row v-else>
+        <v-col cols="6" md="3">
+          <v-btn block color="primary" :loading="loading" @click="updateProject">Save</v-btn>
+        </v-col>
+        <v-col cols="6" md="3">
+          <v-btn block color="pink" :loading="loading" @click="confirmRemove">Delete</v-btn>
+        </v-col>
+      </v-row>
     </v-form>
+    <modal-confirm
+      :active="modalConfirm"
+      :confirm-text="`Confirm`"
+      :title="'Confirm delete.'"
+      :message="`Confirm delete project ${formData.name}.`"
+      :show-cancel="true"
+      @onCancel="() => { modalConfirm = false }"
+      @onConfirm="removeProject" />
   </v-container>
 </template>
 
 <script>
+import ProjectProvider from '@/resources/ProjectProvider'
+import UserProvider from '@/resources/UserProvider'
+import ModalConfirm from '@/components/ModalConfirm'
+import { uploadToBucket } from '@/assets/js/S3'
+import { mapActions } from 'vuex'
+const projectService = new ProjectProvider()
+const userService = new UserProvider()
+
 export default {
-data: () => ({
-      items: ['Team DEVa', 'Team DEVb', 'Team DEVc', 'Team DEVe'],
+  components: {
+    ModalConfirm
+  },
+  data: () => ({
+    teams: [],
+    activeDate: false,
+    valid: false,
+    loading: false,
+    modalConfirm: false,
+    formData: {
+      name: '',
+      description: '',
+      team: null,
+      requirements: [
+        {
+          fileUpload: null,
+          imageUpload: null,
+          detail: '',
+          file: null,
+          image: null
+        }
+      ],
+      deadlineDate: null
+    },
+    validation: {
+      name: [(v) => !!v || 'This feild is require.'],
+      team: [(v) => !!v || 'This feild is require.'],
+      requirementDetail: [(v) => !!v || 'This feild is require.']
+    }
+  }),
+  computed: {
+    isUpdating () {
+      return this.$route.params.id ? true : false
+    },
+    projectId () {
+      return this.$route.params.id ? this.$route.params.id : 0
+    }
+  },
+  async mounted () {
+    this.loading = true
+    if (this.isUpdating) {
+      await this.getProject()
+    }
+    await this.getTeams()
+    this.loading = false
+  },
+  methods: {
+    ...mapActions({
+      setSnackbar: 'Style/setSnackbar'
     }),
-data2: () => ({
-      date: new Date().toISOString().substr(0, 10),
-      menu2: true,
-    }),
+    removeRequirement (index) {
+      if (this.formData.requirements.length > 1) {
+        this.formData.requirements.splice(index, 1)
+      } 
+    },
+    async getProject () {
+      try {
+        const { data } = await projectService.getProjectById(this.projectId)
+        this.formData = {
+          name: data.name,
+          description: data.description
+        }
+      } catch (err) {
+        this.setSnackbar({
+          message: err.message,
+          type: 'pink',
+          active: true
+        })
+      }
+    },
+    addRequirement () {
+      this.formData.requirements.push({
+        fileUpload: null,
+        imageUpload: null,
+        file: null,
+        image: null,
+        detail: ''
+      })
+    },
+    confirmRemove () {
+      this.modalConfirm = true
+    },
+    async createProject () {
+      this.$refs.form.validate()
+      if (this.valid) {
+        try {
+          this.loading = true
+          const { data } = await projectService.createProject(this.formData)
+          if (data) {
+            this.setSnackbar({
+              message: 'Create project success.',
+              type: 'success',
+              active: true
+            })
+            this.$router.push({ name: 'ProjectList'})
+          }
+        } catch (err) {
+          this.setSnackbar({
+            message: err.message,
+            type: 'pink',
+            active: true
+          })
+        } finally {
+          this.loading = false
+        }
+      }
+    },
+    async uploadFile (file, field, index) {
+      this.loading = true
+      if (file) {
+        const fileName = file.name.split('.')
+        const url = await uploadToBucket(file, fileName[1])
+        this.formData.requirements[index][field] = url
+      } else {
+        this.formData.requirements[index][field] = null
+      }
+      this.loading = false
+    },
+    async updateProject () {
+      this.$refs.form.validate()
+      if (this.valid) {
+        try {
+          this.loading = true
+          const { data } = await projectService.updateProject(this.projectId, this.formData)
+          if (data) {
+            this.setSnackbar({
+              message: 'Update project success.',
+              type: 'success',
+              active: true
+            })
+            this.$router.push({ name: 'ProjectList'})
+          }
+        } catch (err) {
+          this.setSnackbar({
+            message: err.message,
+            type: 'pink',
+            active: true
+          })
+        } finally {
+          this.loading = false
+        }
+      }
+    },
+    async removeProject () {
+      try {
+        this.loading = true
+        const { data } = await projectService.deleteProject(this.projectId)
+        if (data) {
+          this.setSnackbar({
+            message: 'Remove project success.',
+            type: 'success',
+            active: true
+          })
+          this.$router.push({ name: 'ProjectList'})
+        }
+      } catch (err) {
+        this.setSnackbar({
+          message: err.message,
+          type: 'pink',
+          active: true
+        })
+      } finally {
+        this.loading = false
+      }
+    },
+    async getTeams () {
+      try {
+        const { data: { results } } = await userService.getAllTeam(`limit=9999`)
+        this.teams = results.map(d => ({ name: d.name, id: d.id }))
+      } catch (err) {
+        this.setSnackbar({
+          message: err.message,
+          type: 'pink',
+          active: true
+        })
+      }
+    }
+  }
 }
 </script>
 
-<style>
-
+<style lang="css" scoped>
+.box {
+  border: 1px solid #cfcfcf;
+  border-radius: 6px;
+}
 </style>
