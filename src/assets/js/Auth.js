@@ -1,7 +1,7 @@
 import jwtDecode from 'jwt-decode'
 import Cookies from 'js-cookie'
 
-const storageKey = 'CampAccessToken'
+const storageKey = 'AccessToken'
 
 const getAuth = () => {
   const auth = Cookies.getJSON(storageKey)

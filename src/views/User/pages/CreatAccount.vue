@@ -71,6 +71,16 @@
       <v-row>
         <v-col class="d-flex" cols="12" md="8">
           <v-select
+            v-model="formData.role"
+            :items="roles"
+            :rules="validation.role"
+            label="Role"
+            outlined></v-select>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col class="d-flex" cols="12" md="8">
+          <v-select
             v-model="formData.department"
             :rules="validation.department"
             :items="departments"
@@ -145,11 +155,18 @@ export default {
       firstName: '',
       lastName: '',
       email: '',
+      role: 'user',
       phoneNumber: '',
       username: '',
       department: '',
       photo: null
     },
+    roles: [
+      'admin',
+      'hr',
+      'sa',
+      'user'
+    ],
     validation: {
       title: [
         v => !!v || 'This feild is require.'
@@ -168,6 +185,9 @@ export default {
         v => !!v || 'This feild is require.'
       ],
       department: [
+        v => !!v || 'This feild is require.'
+      ],
+      role: [
         v => !!v || 'This feild is require.'
       ]
     }
@@ -204,7 +224,7 @@ export default {
       this.loading = true
       if (this.image) {
         const fileName = this.image.name.split('.')
-        const url = await uploadToBucket(this.image, fileName[1])
+        const url = await uploadToBucket(this.image, fileName[fileName.length - 1])
         this.formData.photo = url
       } else {
         this.formData.photo = null

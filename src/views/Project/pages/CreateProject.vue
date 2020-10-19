@@ -83,8 +83,13 @@
                   v-model="formData.requirements[index].detail"
                   persistent-hint
                   outlined />
-                <div class="d-flex ma-4 justify-center  " v-if="formData.requirements[index].imageUpload !== null">
+                <div class="d-flex ma-4 justify-center align-center flex-column" v-if="formData.requirements[index].imageUpload !== null">
                   <img :src="formData.requirements[index].imageUpload" width="200" alt="">
+                  <v-btn
+                    x-small
+                    color="pink"
+                    style="width: fit-content;"
+                    @click="removeImage(index)"> X </v-btn>
                 </div>
                 <v-file-input
                   outlined
@@ -95,12 +100,16 @@
                   @change="(file) => { uploadFile(file, 'imageUpload', index) }"
                   truncate-length="15"
                 ></v-file-input>
-                <div class="d-flex ma-4 justify-center  " v-if="formData.requirements[index].fileUpload !== null">
+                <div class="d-flex ma-4 justify-center align-center flex-column" v-if="formData.requirements[index].fileUpload !== null">
                   {{ formData.requirements[index].fileUpload }}
+                  <v-btn
+                    x-small
+                    color="pink"
+                    style="width: fit-content;"
+                    @click="removeFile(index)"> X </v-btn>
                 </div>
                 <v-file-input
                   outlined
-                  accept="image/*"
                   label="File"
                   dense
                   v-model="formData.requirements[index].file"
@@ -164,6 +173,7 @@ import UserProvider from '@/resources/UserProvider'
 import ModalConfirm from '@/components/ModalConfirm'
 import { uploadToBucket } from '@/assets/js/S3'
 import { mapActions } from 'vuex'
+import dayjs from 'dayjs'
 const projectService = new ProjectProvider()
 const userService = new UserProvider()
 
@@ -179,7 +189,7 @@ export default {
     modalConfirm: false,
     formData: {
       name: '',
-      description: '',
+      detail: '',
       team: null,
       requirements: [
         {
@@ -223,12 +233,30 @@ export default {
         this.formData.requirements.splice(index, 1)
       } 
     },
+    removeFile (index) {
+      this.formData.requirements[index].fileUpload = null
+      this.formData.requirements[index].file = null
+    },
+    removeImage (index) {
+      this.formData.requirements[index].imageUpload = null
+      this.formData.requirements[index].image = null
+    },
     async getProject () {
       try {
         const { data } = await projectService.getProjectById(this.projectId)
         this.formData = {
           name: data.name,
-          description: data.description
+          detail: data.detail,
+          deadlineDate: dayjs(data.deadlineDate).format('YYYY-MM-DD'),
+          team: data.team.id,
+          requirements: data.requirements.map(r => ({
+            id: r.id,
+            fileUpload: r.fileUpload,
+            imageUpload: r.imageUpload,
+            detail: r.detail,
+            file: null,
+            image: null
+          }))
         }
       } catch (err) {
         this.setSnackbar({
@@ -279,7 +307,7 @@ export default {
       this.loading = true
       if (file) {
         const fileName = file.name.split('.')
-        const url = await uploadToBucket(file, fileName[1])
+        const url = await uploadToBucket(file, fileName[fileName.length - 1])
         this.formData.requirements[index][field] = url
       } else {
         this.formData.requirements[index][field] = null

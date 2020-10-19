@@ -20,8 +20,7 @@ export default {
     {
       path: ':id/update',
       name: 'UpdateProject',
-      component: () => import('@/views/Project/pages/UpdateProject.vue'),
-    },
-
+      component: () => import('@/views/Project/pages/CreateProject.vue'),
+    }
   ]
 }
