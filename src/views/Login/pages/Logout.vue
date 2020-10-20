@@ -1,5 +1,5 @@
 <script>
-import { clearAuth } from '@/assets/js/Auth'
+import { clearAuth } from '@/utils/js/Auth'
 export default {
   mounted () {
     clearAuth()

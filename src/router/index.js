@@ -5,7 +5,7 @@ import User from './modules/user'
 import Team from './modules/team'
 import Project from './modules/project'
 import Department from './modules/department'
-import auth from '@/assets/js/Auth'
+import auth from '@/utils/js/Auth'
 
 Vue.use(VueRouter)
 
@@ -62,13 +62,9 @@ router
   } else {
     const data = auth.getAuthDecode()
     if (data && ((data.exp - 1800) * 1000) <= new Date().getTime()) {
-      next({
-        name: 'Login'
-      })
+      router.replace({ name: 'Login' })
     } else if (data === null) {
-      next({
-        name: 'Login'
-      })
+      router.replace({ name: 'Login' })
     }
   }
   next()

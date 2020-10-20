@@ -72,7 +72,7 @@
 
 <script>
 // import listMenu from '@/components/menu/ListMenu.vue'
-import menu from '@/assets/js/menu'
+import menu from '@/utils/js/menu'
 export default {
   components: {
   },

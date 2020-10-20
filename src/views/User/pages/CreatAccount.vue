@@ -138,7 +138,7 @@
 <script>
 import UserProvider from '@/resources/UserProvider'
 import ModalConfirm from '@/components/ModalConfirm'
-import { uploadToBucket } from '@/assets/js/S3'
+import { uploadToBucket } from '@/utils/js/S3'
 import { mapActions } from 'vuex'
 const userService = new UserProvider()
 export default {

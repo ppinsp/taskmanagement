@@ -1,5 +1,5 @@
 import HttpRequest from './HttpRequest'
-import { getAuthToken } from '@/assets/js/Auth'
+import { getAuthToken } from '@/utils/js/Auth'
 export default class ProjectProvider extends HttpRequest {
   getAllProject (query) {
     this.setHeader(getAuthToken())

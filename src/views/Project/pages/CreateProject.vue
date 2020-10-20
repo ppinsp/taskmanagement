@@ -171,7 +171,7 @@
 import ProjectProvider from '@/resources/ProjectProvider'
 import UserProvider from '@/resources/UserProvider'
 import ModalConfirm from '@/components/ModalConfirm'
-import { uploadToBucket } from '@/assets/js/S3'
+import { uploadToBucket } from '@/utils/js/S3'
 import { mapActions } from 'vuex'
 import dayjs from 'dayjs'
 const projectService = new ProjectProvider()
