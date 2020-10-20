@@ -15,10 +15,10 @@ jobs:
           name: "Build docker image and push to docker hub"
           command: |
             if [ "${CIRCLE_BRANCH}" == "production" ]; then
-              docker build -t ${DOCKER_HUB_REPO}:latest .
-              docker build -t ${DOCKER_HUB_REPO}:${CIRCLE_SHA1} .
-              docker push ${DOCKER_HUB_REPO}:latest
-              docker push ${DOCKER_HUB_REPO}:${CIRCLE_SHA1}
+              docker build -t taskmanagement:latest .
+              docker build -t taskmanagement:${CIRCLE_SHA1} .
+              docker push taskmanagement:latest
+              docker push taskmanagement:${CIRCLE_SHA1}
             else
               echo "This is ${CIRCLE_BRANCH}"
             fi

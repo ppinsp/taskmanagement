@@ -16,8 +16,7 @@ const getAuthDecode = () => {
 const setAuthUser = (token, expire) => {
   Cookies.set(storageKey, token, {
     expires: new Date(expire),
-    sameSite: 'strict',
-    secure: process.env.NODE_ENV === 'production'
+    sameSite: 'strict'
   })
   return getAuth()
 }
