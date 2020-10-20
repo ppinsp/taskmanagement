@@ -82,7 +82,7 @@ export default {
         await setAuthUser(data.accessToken, data.tokenExpire)
         setTimeout(() => {
           this.$router.push({ name: 'UserList' })
-        }, 500)
+        }, 1000)
       } catch (err) {
         this.snackbar = {
           value: true,
