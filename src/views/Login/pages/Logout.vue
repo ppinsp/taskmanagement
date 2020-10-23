@@ -1,3 +1,7 @@
+<template>
+  <div></div>
+</template>
+
 <script>
 import { clearAuth } from '@/utils/js/Auth'
 export default {

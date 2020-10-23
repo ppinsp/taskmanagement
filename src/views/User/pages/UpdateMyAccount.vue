@@ -4,8 +4,7 @@
       <v-row>
         <v-col cols="12" md="6">
           <div>
-            <h1 v-if="isUpdating">Update User</h1>
-            <h1 v-else>Create User</h1>
+            <h1>My Account</h1>
           </div>
         </v-col>
       </v-row>
@@ -71,19 +70,10 @@
       <v-row>
         <v-col class="d-flex" cols="12" md="8">
           <v-select
-            v-model="formData.role"
-            :items="roles"
-            :rules="validation.role"
-            label="Role"
-            outlined></v-select>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col class="d-flex" cols="12" md="8">
-          <v-select
             v-model="formData.department"
             :rules="validation.department"
             :items="departments"
+            disabled
             item-text="name"
             item-value="id"
             label="Department"
@@ -94,7 +84,7 @@
         <v-col class="d-flex flex-column align-center justify-center" cols="12" md="8">
           <img :src="formData.photo" width="300" alt="">
           <div>
-            <v-btn class="mt-4" color="pink" @click="removeImage">Remove</v-btn>
+            <v-btn class="mt-4" x-small color="pink" @click="removeImage">Remove</v-btn>
           </div>
         </v-col>
       </v-row>
@@ -110,43 +100,27 @@
           ></v-file-input>
         </v-col>
       </v-row>
-      <v-row v-if="!isUpdating">
-        <v-col cols="12" md="8">
-          <v-btn block color="primary" :loading="loading" @click="createUser">Save</v-btn>
-        </v-col>
-      </v-row>
-      <v-row v-else>
+      <v-row>
         <v-col cols="6" md="4">
           <v-btn block color="primary" :loading="loading" @click="updateUser">Save</v-btn>
         </v-col>
         <v-col cols="6" md="4">
-          <v-btn block color="pink" :loading="loading" @click="confirmRemove">Delete</v-btn>
+          <v-btn block color="teal" :loading="loading" @click="$router.push({ name: 'ResetPassword' })">Reset Password</v-btn>
         </v-col>
       </v-row>
     </v-form>
-    <modal-confirm
-      :active="modalConfirm"
-      :confirm-text="`Confirm`"
-      :title="'Confirm delete.'"
-      :message="`Confirm delete user ${formData.username}.`"
-      :show-cancel="true"
-      @onCancel="() => { modalConfirm = false }"
-      @onConfirm="removeUser" />
   </v-container>
 </template>
 
 <script>
 import UserProvider from '@/resources/UserProvider'
-import ModalConfirm from '@/components/ModalConfirm'
 import { uploadToBucket } from '@/utils/js/S3'
 import { mapActions } from 'vuex'
 const userService = new UserProvider()
 export default {
-  components: { ModalConfirm },
   data: () => ({
     loading: false,
     image: null,
-    modalConfirm: false,
     titles: [],
     valid: false,
     departments: [],
@@ -155,7 +129,6 @@ export default {
       firstName: '',
       lastName: '',
       email: '',
-      role: 'user',
       phoneNumber: '',
       username: '',
       department: '',
@@ -193,33 +166,23 @@ export default {
     }
   }),
   computed: {
-    isUpdating () {
-      return this.$route.params.id ? true : false
-    },
     userId () {
       return this.$route.params.id ? this.$route.params.id : 0
     }
   },
   async mounted () {
     this.loading = true
-    await this.getTitles()
-    await this.getDepartments()
-    if (this.isUpdating) {
-      await this.getUser()
-    }
+    await Promise.all([
+      this.getTitles(),
+      this.getDepartments(),
+      this.getUser()
+    ])
     this.loading = false
   },
   methods: {
     ...mapActions({
       setSnackbar: 'Style/setSnackbar'
     }),
-    confirmRemove () {
-      this.modalConfirm = true
-    },
-    removeImage () {
-      this.formData.photo = null
-      this.image = null
-    },
     async uploadImage () {
       this.loading = true
       if (this.image) {
@@ -241,7 +204,6 @@ export default {
           email: data.email,
           phoneNumber: data.phoneNumber,
           username: data.username,
-          role: data.role,
           department: data.department.id,
           photo: data.photo
         }
@@ -251,31 +213,6 @@ export default {
           type: 'pink',
           active: true
         })
-      }
-    },
-    async createUser () {
-      this.$refs.form.validate()
-      if (this.valid) {
-        try {
-          this.loading = true
-          const { data } = await userService.createUser(this.formData)
-          if (data) {
-            this.setSnackbar({
-              message: 'Create user success.',
-              type: 'success',
-              active: true
-            })
-            this.$router.push({ name: 'UserList'})
-          }
-        } catch (err) {
-          this.setSnackbar({
-            message: err.message,
-            type: 'pink',
-            active: true
-          })
-        } finally {
-          this.loading = false
-        }
       }
     },
     async updateUser () {
@@ -301,28 +238,6 @@ export default {
         } finally {
           this.loading = false
         }
-      }
-    },
-    async removeUser () {
-      try {
-        this.loading = true
-        const { data } = await userService.deleteUser(this.userId)
-        if (data) {
-          this.setSnackbar({
-            message: 'Remove user success.',
-            type: 'success',
-            active: true
-          })
-          this.$router.push({ name: 'UserList'})
-        }
-      } catch (err) {
-        this.setSnackbar({
-          message: err.message,
-          type: 'pink',
-          active: true
-        })
-      } finally {
-        this.loading = false
       }
     },
     async getDepartments () {

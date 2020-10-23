@@ -36,12 +36,29 @@ const getAuthToken = () => {
   return token
 }
 
+const setUserData = (data) => {
+  window.localStorage.setItem('user_data', JSON.stringify(data))
+}
+
+export function getUser () {
+  const user = window.localStorage.getItem('user_data')
+  return user ? JSON.parse(user) : null
+}
+
+
+export function getStoreBearer () {
+  let auth = window.localStorage.getItem('sellsuki.store.bearer')
+  // auth = JSON.parse(auth)
+  return auth
+}
+
 export default {
   setAuthUser,
   getAuth,
   getAuthToken,
   clearAuth,
-  getAuthDecode
+  getAuthDecode,
+  setUserData
 }
 
 export {
@@ -49,5 +66,6 @@ export {
   getAuth,
   getAuthToken,
   clearAuth,
-  getAuthDecode
+  getAuthDecode,
+  setUserData
 }
