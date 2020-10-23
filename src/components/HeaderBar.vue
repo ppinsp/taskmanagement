@@ -8,11 +8,29 @@
     <v-breadcrumbs
       class="pl-3 py-2"
       :items="breadcrumbs" />
-
     <v-spacer />
 
     <v-menu offset-y>
-      <v-list>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+          class="user-avatar"
+          icon
+          v-bind="attrs"
+          width="36"
+          height="36"
+          v-on="on">
+          <v-avatar
+            min-width="36"
+            width="36"
+            height="36">
+            <img v-if="userData && userData.photo" :src="userData.photo" alt="user-avatar">
+            <v-icon v-else dark>
+              mdi-account-circle
+            </v-icon>
+          </v-avatar>
+        </v-btn>
+      </template>
+      <v-list v-if="ready">
         <v-list-item
           v-for="(item, index) in items"
           :key="index"
@@ -26,6 +44,7 @@
 </template>
 
 <script>
+import { getUser } from '@/utils/js/Auth'
 export default {
   props: {
     value: {
@@ -49,15 +68,30 @@ export default {
   },
   data () {
     return {
+      ready: false,
+      userData: {},
       items: [
         {
           title: 'Logout',
           to: '/logout'
+        },
+        {
+          title: 'My Account',
+          to: ''
         }
       ]
     }
   },
+  created () {
+    this.userData = getUser()
+    this.setLinkToMyAccount()
+    this.ready = true
+  },
   methods: {
+    setLinkToMyAccount () {
+      const index = this.items.findIndex(i => i.title === 'My Account')
+      this.items[index].to = `/user/${this.userData.sub}/my-account`
+    },
     update (value) {
       this.$emit('input', value)
     },

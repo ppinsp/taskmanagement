@@ -56,7 +56,7 @@
 <script>
 import AuthProvider from '@/resources/AuthProvider'
 import Snackbar from '@/components/Snackbar'
-import { setAuthUser } from '@/utils/js/Auth'
+import { setAuthUser, setUserData } from '@/utils/js/Auth'
 const authService = new AuthProvider()
 
 export default {
@@ -80,9 +80,11 @@ export default {
         this.loading = true
         const { data } = await authService.login(this.username, this.password)
         await setAuthUser(data.accessToken, data.tokenExpire)
+        console.log(data)
+        await setUserData(data)
         setTimeout(() => {
-          this.$router.push({ name: 'UserList' })
-        }, 1000)
+          this.$router.push('/')
+        }, 500)
       } catch (err) {
         this.snackbar = {
           value: true,

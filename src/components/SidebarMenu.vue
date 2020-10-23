@@ -9,6 +9,7 @@
     :temporary="isMobile && value"
     :permanent="!isMobile"
     :width="210"
+    src="https://wallpaperaccess.com/full/1321369.jpg"
     dark
     @input="update">
     <template v-slot:prepend>
@@ -34,7 +35,7 @@
 
     <v-list>
       <v-list-item
-        v-for="item in items"
+        v-for="item in menus"
         :to="item.to"
         :key="item.title"
         link
@@ -71,11 +72,9 @@
 </template>
 
 <script>
-// import listMenu from '@/components/menu/ListMenu.vue'
 import menu from '@/utils/js/menu'
+import { getUser } from '@/utils/js/Auth'
 export default {
-  components: {
-  },
   data () {
     return {
       items: menu.menus
@@ -109,28 +108,9 @@ export default {
     iconTheme () {
       return this.$vuetify.theme.dark ? 'mdi-white-balance-sunny' : 'mdi-moon-waning-crescent'
     },
-    itemsPermistion () {
-      const newItems = []
-      try {
-        for (let i = 0; i < this.items.length; i++) {
-          const item = this.items[i]
-          if (item.children) {
-            const children = item.children.filter((r) => !!r.meta && !!r.meta.middleware && !!r.meta.middleware[this.role])
-            if (children.length > 0) {
-              newItems.push({
-                title: item.title,
-                icon: item.icon,
-                children
-              })
-            }
-          } else if (!item.meta || !item.meta.middleware || (!!item.meta && !!item.meta.middleware && !!item.meta.middleware[this.role])) {
-            newItems.push(item)
-          }
-        }
-        return newItems
-      } catch (err) {
-        return []
-      }
+    menus () {
+      const user = getUser()
+      return this.items.filter(item => item.roles.some(r => r === user.role))
     }
   },
   methods: {

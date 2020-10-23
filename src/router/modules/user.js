@@ -22,5 +22,10 @@ export default {
       name: 'UserDetail',
       component: () => import('@/views/User/pages/UserDetail.vue'),
     },
+    {
+      path: ':id/my-account',
+      name: 'UserMyAccount',
+      component: () => import('@/views/User/pages/UpdateMyAccount.vue'),
+    },
   ]
 }
