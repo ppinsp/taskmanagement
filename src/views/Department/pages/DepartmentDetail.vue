@@ -5,7 +5,7 @@
         <table>
           <tr>
             <td class="pa-2"> ID : {{ department.id }} </td>
-            <td class="pa-2"> Name : {{ department.name }} </td>
+            <td class="pa-2"> Depart name : {{ department.name }} </td>
           </tr>
           <tr>
             <td class="pa-2"> Description : </td> <td> {{ department.description }} </td>
@@ -14,10 +14,10 @@
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="4">
+      <v-col cols="6" md="2">
         <v-btn block color="warning" :loading="loading" @click="$router.push({ name: 'UpdateDepartment', params: { id: department.id }})">Update</v-btn>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="6" md="2">
         <v-btn block color="pink" :loading="loading" @click="confirmRemove">Delete</v-btn>
       </v-col>
     </v-row>

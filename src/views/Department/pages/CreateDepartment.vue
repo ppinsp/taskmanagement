@@ -2,13 +2,13 @@
   <v-container>
     <v-form ref="form" v-model="valid" :lazy-validation="false">
       <v-row>
-        <v-col cols="12">
+        <v-col cols="12" md="6" offset-md="3">
           <h1 v-if="isUpdating">Update Department</h1>
           <h1 v-else>Create Department</h1>
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="6" offset-md="3">
           <v-text-field
             label="Name"
             v-model="formData.name"
@@ -19,7 +19,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="6" offset-md="3">
           <v-text-field
             label="Description"
             v-model="formData.description"
@@ -29,7 +29,7 @@
         </v-col>
       </v-row>
       <v-row v-if="!isUpdating">
-        <v-col cols="12" md="6">
+        <v-col cols="12" md="6" offset-md="3"> 
           <div class="text-center">
             <v-btn
               block
@@ -42,7 +42,7 @@
         </v-col>
       </v-row>
       <v-row v-else>
-        <v-col cols="6" md="3">
+        <v-col cols="6" md="3" offset-md="3">
           <v-btn block color="primary" :loading="loading" @click="updateDepartment">Save</v-btn>
         </v-col>
         <v-col cols="6" md="3">

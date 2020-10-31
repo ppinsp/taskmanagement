@@ -2,6 +2,7 @@
   <v-app-bar
     app
     color="blue"
+    src="@/assets/navbar-bg.jpg"
     :class="{ 'app-bar-mobile': windowWidth < 768 }">
     <v-app-bar-nav-icon @click="windowWidth < 768 ? update(true) : setMini()" />
 

@@ -9,7 +9,7 @@
     :temporary="isMobile && value"
     :permanent="!isMobile"
     :width="210"
-    src="https://wallpaperaccess.com/full/1321369.jpg"
+    src="@/assets/navbar-bg.jpg"
     dark
     @input="update">
     <template v-slot:prepend>
@@ -19,7 +19,7 @@
           id="branding"
           min-width="150"
           max-width="150">
-          <router-link :to="{ name: 'Main' }" style="font-size: 14px;">
+          <router-link :to="{ name: 'Main' }" style="font-size: 14px; color: #3c3c3c;">
             Project Management
           </router-link>
         </v-list-item-avatar>
@@ -27,6 +27,7 @@
           v-if="isMobile"
           class="btn-collect-menu"
           icon
+          color="grey darken-1"
           @click.stop="update(false)">
           <v-icon>mdi-close-circle-outline</v-icon>
         </v-btn>
@@ -41,11 +42,11 @@
         link
       >
         <v-list-item-icon>
-          <v-icon>{{ item.icon }}</v-icon>
+          <v-icon color="grey darken-1">{{ item.icon }}</v-icon>
         </v-list-item-icon>
 
         <v-list-item-content>
-          <v-list-item-title>{{ item.title }}</v-list-item-title>
+          <v-list-item-title style="color: #757575">{{ item.title }}</v-list-item-title>
         </v-list-item-content>
       </v-list-item>
     </v-list>
@@ -58,6 +59,7 @@
           :text="!mini || isMobile"
           :icon="mini && !isMobile"
           small
+          color="grey darken-1"
           @click="logout()">
           <v-icon :class="{ 'mr-1': !mini || isMobile }">
             mdi-logout
