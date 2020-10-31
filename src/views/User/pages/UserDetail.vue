@@ -1,34 +1,87 @@
 <template>
   <v-container>
     <v-row>
-      <v-col>
-        <table>
-          <tr>
-            <td class="pa-2"> ID : </td> <td> {{ user.id }} </td>
-          </tr>
-          <tr>
-            <td class="pa-2"> Name : </td> <td> {{ `${user.title} ${user.firstName} ${user.lastName}` }} </td>
-          </tr>
-          <tr>
-            <td class="pa-2"> Username : </td> <td> {{ user.username }} </td>
-          </tr>
-          <tr>
-            <td class="pa-2"> Email : </td> <td> {{ user.email }} </td>
-          </tr>
-          <tr>
-            <td class="pa-2"> Phone Number : </td> <td> {{ user.phoneNumber }} </td>
-          </tr>
-          <tr>
-            <td class="pa-2"> Department : </td> <td> {{ user.department.name }} </td>
-          </tr>
-          <tr>
-            <td class="pa-2"> CreateTime : </td> <td> {{ user.createdAt | localDate() }} </td>
-          </tr>
-        </table>
+      <v-col cols="12" md="8" offset-md="2">
+        <v-card>
+          <v-row>
+            <v-col>
+                <v-card
+                  class="mx-auto"
+                  max-width="434"
+                  tile
+                >
+                  <v-img height="100%" src="@/assets/card-bg.png">
+                    <v-row
+                      align="end"
+                      class="fill-height"
+                    >
+                      <v-col
+                        align-self="start"
+                        class="pa-0"
+                        cols="12"
+                      >
+                        <v-avatar
+                          class="profile"
+                          color="grey"
+                          size="164"
+                          tile
+                        >
+                          <v-img v-if="user.photo && user.photo !== null" :src="user.photo"></v-img>
+                          <v-icon size="84" v-else dark>
+                            mdi-account-circle
+                          </v-icon>
+                        </v-avatar>
+                      </v-col>
+                      <v-col class="py-0">
+                        <v-list-item
+                          color="rgba(0, 0, 0, .4)"
+                          dark
+                        >
+                          <v-list-item-content>
+                            <v-list-item-title class="title">
+                              {{ `${user.title} ${user.firstName} ${user.lastName}` }}
+                            </v-list-item-title>
+                            <v-list-item-subtitle>{{ user.department.name }}</v-list-item-subtitle>
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-col>
+                    </v-row>
+                  </v-img>
+                </v-card>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <table>
+                <tr>
+                  <td class="pa-2"> ID : </td> <td> {{ user.id }} </td>
+                </tr>
+                <tr>
+                  <td class="pa-2"> Name : </td> <td> {{ `${user.title} ${user.firstName} ${user.lastName}` }} </td>
+                </tr>
+                <tr>
+                  <td class="pa-2"> Username : </td> <td> {{ user.username }} </td>
+                </tr>
+                <tr>
+                  <td class="pa-2"> Email : </td> <td> {{ user.email }} </td>
+                </tr>
+                <tr>
+                  <td class="pa-2"> Phone Number : </td> <td> {{ user.phoneNumber }} </td>
+                </tr>
+                <tr>
+                  <td class="pa-2"> Department : </td> <td> {{ user.department.name }} </td>
+                </tr>
+                <tr>
+                  <td class="pa-2"> CreateTime : </td> <td> {{ user.createdAt | localDate() }} </td>
+                </tr>
+              </table>
+            </v-col>
+          </v-row>
+        </v-card>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="4">
+      <v-col cols="4" offset="2">
         <v-btn block color="warning" :loading="loading" @click="$router.push({ name: 'UpdateUser', params: { id: user.id }})">Update</v-btn>
       </v-col>
       <v-col cols="4">
@@ -115,3 +168,12 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.v-list-item__title.title {
+  text-shadow: 1px 1px 1px #545454;
+}
+.v-list-item__subtitle {
+  text-shadow: 1px 1px 1px #787878;
+}
+</style>

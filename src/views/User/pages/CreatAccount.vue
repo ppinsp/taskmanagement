@@ -2,7 +2,7 @@
   <v-container>
     <v-form ref="form" v-model="valid" :lazy-validation="false">
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" offset-md="2" md="6">
           <div>
             <h1 v-if="isUpdating">Update User</h1>
             <h1 v-else>Create User</h1>
@@ -10,7 +10,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="2" md="2">
+        <v-col cols="2" offset-md="2" md="2">
           <v-select
             v-model="formData.title"
             :rules="validation.title"
@@ -38,7 +38,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="8" class="my-n8">
+        <v-col cols="12" offset-md="2" md="8" class="my-n8">
           <v-text-field
             label="E-mail"
             v-model="formData.email"
@@ -48,7 +48,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="8">
+        <v-col cols="12" offset-md="2" md="8">
           <v-text-field
             v-model="formData.phoneNumber"
             label="Phone number"
@@ -58,7 +58,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="8" class="my-n8">
+        <v-col cols="12" offset-md="2" md="8" class="my-n8">
           <v-text-field
             v-model="formData.username"
             :rules="validation.username"
@@ -69,7 +69,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col class="d-flex" cols="12" md="8">
+        <v-col class="d-flex" offset-md="2" cols="12" md="8">
           <v-select
             v-model="formData.role"
             :items="roles"
@@ -79,7 +79,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col class="d-flex" cols="12" md="8">
+        <v-col class="d-flex" offset-md="2" cols="12" md="8">
           <v-select
             v-model="formData.department"
             :rules="validation.department"
@@ -91,15 +91,19 @@
         </v-col>
       </v-row>
       <v-row v-if="formData.photo !== null">
-        <v-col class="d-flex flex-column align-center justify-center" cols="12" md="8">
-          <img :src="formData.photo" width="300" alt="">
-          <div>
-            <v-btn class="mt-4" color="pink" @click="removeImage">Remove</v-btn>
+        <v-col class="d-flex flex-column align-center justify-center" cols="12" offset-md="2" md="8">
+          <div class="img-panel">
+            <v-btn class="mx-2 remove-img-btn" fab dark x-small @click="removeImage" color="pink">
+              <v-icon>
+                mdi-window-close
+              </v-icon>
+            </v-btn>
+            <img :src="formData.photo" width="300" alt="">
           </div>
         </v-col>
       </v-row>
       <v-row>
-        <v-col class="d-flex" cols="12" md="8">
+        <v-col class="d-flex" cols="12" offset-md="2" md="8">
           <v-file-input
             outlined
             accept="image/*"
@@ -111,12 +115,12 @@
         </v-col>
       </v-row>
       <v-row v-if="!isUpdating">
-        <v-col cols="12" md="8">
+        <v-col cols="12" offset-md="2" md="8">
           <v-btn block color="primary" :loading="loading" @click="createUser">Save</v-btn>
         </v-col>
       </v-row>
       <v-row v-else>
-        <v-col cols="6" md="4">
+        <v-col cols="6" offset-md="2" md="4">
           <v-btn block color="primary" :loading="loading" @click="updateUser">Save</v-btn>
         </v-col>
         <v-col cols="6" md="4">
@@ -352,3 +356,17 @@ export default {
   }
 }
 </script>
+
+<style lang="css" scoped>
+.img-panel {
+  width: fit-content;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.remove-img-btn {
+  position: absolute;
+  margin-right: -10px !important;
+  margin-top: -10px !important;
+}
+</style>

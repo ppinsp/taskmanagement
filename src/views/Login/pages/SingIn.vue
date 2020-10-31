@@ -2,14 +2,14 @@
   <v-container>
     <v-form>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" offset-md="3" md="6">
           <div class="text-center">
-            <h1>Sing In</h1>
+            <h1>Login</h1>
           </div>
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" offset-md="3" md="6">
           <v-text-field
             v-model="username"
             label="User name"
@@ -19,7 +19,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" offset-md="3" md="6">
           <v-text-field
             v-model="password"
             label="Password"
@@ -32,7 +32,7 @@
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" offset-md="3" md="6">
           <div class="text-center">
             <v-btn
               @click="login"
