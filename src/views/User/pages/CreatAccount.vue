@@ -159,7 +159,7 @@ export default {
       firstName: '',
       lastName: '',
       email: '',
-      role: 'user',
+      role: 'admin',
       phoneNumber: '',
       username: '',
       department: '',
@@ -168,8 +168,7 @@ export default {
     roles: [
       'admin',
       'hr',
-      'sa',
-      'user'
+      'sa'
     ],
     validation: {
       title: [
