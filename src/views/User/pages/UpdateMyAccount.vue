@@ -109,20 +109,34 @@
           <v-btn block color="primary" :loading="loading" @click="updateUser">Save</v-btn>
         </v-col>
         <v-col cols="6" md="4">
-          <v-btn block color="teal" :loading="loading" @click="$router.push({ name: 'ResetPassword' })">Reset Password</v-btn>
+          <v-btn block color="teal" :loading="loading" @click="resetPassword()">Reset Password</v-btn>
         </v-col>
       </v-row>
     </v-form>
+    <modal-confirm
+      :active="modal"
+      :confirm-text="`Login`"
+      :title="'Reset Password'"
+      :message="`Please open your email for reset password`"
+      :show-cancel="false"
+      @onConfirm="() => { $router.push({ name: 'Login' })}" />
   </v-container>
 </template>
 
 <script>
 import UserProvider from '@/resources/UserProvider'
 import { uploadToBucket } from '@/utils/js/S3'
+import ModalConfirm from '@/components/ModalConfirm'
 import { mapActions } from 'vuex'
+import AuthProvider from '@/resources/AuthProvider'
+const authService = new AuthProvider()
 const userService = new UserProvider()
 export default {
+  components: {
+    ModalConfirm
+  },
   data: () => ({
+    modal: false,
     loading: false,
     image: null,
     titles: [],
@@ -217,6 +231,21 @@ export default {
           type: 'pink',
           active: true
         })
+      }
+    },
+    async resetPassword () {
+      try {
+        this.loading = true
+        await authService.resetPassword(this.formData.username)
+        this.modal = true
+      } catch (err) {
+        this.snackbar = {
+          value: true,
+          type: 'pink',
+          message: err.message
+        }
+      } finally {
+        this.loading = false
       }
     },
     async updateUser () {
