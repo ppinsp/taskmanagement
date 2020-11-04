@@ -10,7 +10,7 @@
                   max-width="434"
                   tile
                 >
-                  <v-img height="100%" src="@/assets/card-bg.png">
+                  <v-img height="100%" src="@/assets/usercard-bg.jpg">
                     <v-row
                       align="end"
                       class="fill-height"
@@ -51,28 +51,28 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col>
+            <v-col cols="12" md="8" offset-md="4">
               <table>
                 <tr>
-                  <td class="pa-2"> ID : </td> <td> {{ user.id }} </td>
+                  <td class="pa-2"> User code </td> <td class="pl-5"> {{ user.id }} </td>
                 </tr>
                 <tr>
-                  <td class="pa-2"> Name : </td> <td> {{ `${user.title} ${user.firstName} ${user.lastName}` }} </td>
+                  <td class="pa-2"> Name  </td> <td class="pl-5"> {{ `${user.title} ${user.firstName} ${user.lastName}` }} </td>
                 </tr>
                 <tr>
-                  <td class="pa-2"> Username : </td> <td> {{ user.username }} </td>
+                  <td class="pa-2"> Username  </td> <td class="pl-5"> {{ user.username }} </td>
                 </tr>
                 <tr>
-                  <td class="pa-2"> Email : </td> <td> {{ user.email }} </td>
+                  <td class="pa-2"> Email  </td> <td class="pl-5"> {{ user.email }} </td>
                 </tr>
                 <tr>
-                  <td class="pa-2"> Phone Number : </td> <td> {{ user.phoneNumber }} </td>
+                  <td class="pa-2"> Phone Number  </td> <td class="pl-5"> {{ user.phoneNumber }} </td>
                 </tr>
                 <tr>
-                  <td class="pa-2"> Department : </td> <td> {{ user.department.name }} </td>
+                  <td class="pa-2"> Department  </td> <td class="pl-5"> {{ user.department.name }} </td>
                 </tr>
                 <tr>
-                  <td class="pa-2"> CreateTime : </td> <td> {{ user.createdAt | localDate() }} </td>
+                  <td class="pa-2"> CreateTime  </td> <td class="pl-5"> {{ user.createdAt | localDate() }} </td>
                 </tr>
               </table>
             </v-col>

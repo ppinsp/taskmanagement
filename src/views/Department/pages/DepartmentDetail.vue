@@ -1,20 +1,22 @@
 <template>
   <v-container>
     <v-row>
-      <v-col>
+      <v-col cols="12" md="8">
         <table>
           <tr>
-            <td class="pa-2"> ID : {{ department.id }} </td>
-            <td class="pa-2"> Depart name : {{ department.name }} </td>
+            <td class="pa-2"> code </td> <td class="pl-5"> {{ department.id }} </td>
           </tr>
           <tr>
-            <td class="pa-2"> Description : </td> <td> {{ department.description }} </td>
+            <td class="pa-2"> Depart name  </td> <td class="pl-5"><div><h1>  {{ department.name }} </h1></div></td>
+          </tr>
+          <tr>
+            <td class="pa-2"> Description  </td> <td class="pl-5">{{ department.description }} </td>
           </tr>
         </table>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="6" md="2">
+      <v-col cols="6" md="2" >
         <v-btn block color="warning" :loading="loading" @click="$router.push({ name: 'UpdateDepartment', params: { id: department.id }})">Update</v-btn>
       </v-col>
       <v-col cols="6" md="2">
