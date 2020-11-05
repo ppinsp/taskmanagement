@@ -4,20 +4,22 @@
       <v-col>
         <table>
           <tr>
-            <td class="pa-2"> ID : {{ team.id }} </td>
-            <td class="pa-2"> Name : {{ team.name }} </td>
+            <td class="pa-2"> Code </td> <td class="pl-5"> {{ team.id }} </td>
           </tr>
           <tr>
-            <td class="pa-2"> Description : </td> <td> {{ team.description }} </td>
+            <td class="pa-2"> Team name </td> <td class="pl-5"><div><h1> {{ team.name }} </h1></div></td>
+          </tr>
+          <tr>
+            <td class="pa-2"> Description </td> <td class="pl-5"> {{ team.description }} </td>
           </tr>
         </table>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="4">
+      <v-col cols="6" md="2">
         <v-btn block color="warning" :loading="loading" @click="$router.push({ name: 'UpdateTeam', params: { id: team.id }})">Update</v-btn>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="6" md="2">
         <v-btn block color="pink" :loading="loading" @click="confirmRemove">Delete</v-btn>
       </v-col>
     </v-row>

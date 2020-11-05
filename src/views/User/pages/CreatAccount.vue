@@ -5,7 +5,7 @@
         <v-col cols="12" offset-md="2" md="6">
           <div>
             <h1 v-if="isUpdating">Update User</h1>
-            <h1 v-else>Create User</h1>
+            <h1 v-else>Create User account</h1>
           </div>
         </v-col>
       </v-row>

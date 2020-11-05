@@ -4,28 +4,32 @@
       <v-col>
         <table>
           <tr>
-            <td class="pa-2"> ID : {{ project.id }} </td>
-            <td class="pa-2"> Name : {{ project.name }} </td>
-            <td class="pa-2"> Team : {{ project.team ? project.team.name : '' }} </td>
+            <td class="pa-2"> code </td> <td class="pl-6">{{ project.id }} </td>
           </tr>
           <tr>
-            <td class="pa-2"> Detail : </td> <td> {{ project.detail }} </td>
+            <td class="pa-2"> Project name </td> <td class="pl-6"><div><h1> {{ project.name }} </h1></div></td>
+          </tr>
+          <tr>
+            <td class="pa-2"> Team </td> <td class="pl-6">{{ project.team ? project.team.name : '' }} </td>
+          </tr>
+          <tr>
+            <td class="pa-2"> Detail  </td> <td class="pl-6"> {{ project.detail }} </td>
           </tr>
         </table>
       </v-col>
     </v-row>
     <v-row>
-      <v-col cols="4">
+      <v-col cols="6" md="2">
         <v-btn block color="warning" :loading="loading" @click="$router.push({ name: 'UpdateProject', params: { id: project.id }})">Update</v-btn>
       </v-col>
-      <v-col cols="4">
+      <v-col cols="6" md="2">
         <v-btn block color="pink" :loading="loading" @click="confirmRemove">Delete</v-btn>
       </v-col>
     </v-row>
     <v-row v-for="requirement in project.requirements" :key="requirement.id">
       <v-col class="box">
         <v-row class="col-12">
-          <span style="font-weight: bold;">Detail : </span> {{ requirement.detail }}
+          <span style="font-weight: bold;"> Requriement List</span> {{ requirement.detail }}
         </v-row>
         <v-row class="col-12">
           <img :src="requirement.imageUpload" width="300" alt="">
