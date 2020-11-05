@@ -248,7 +248,6 @@ export default {
           department: data.department.id,
           photo: data.photo
         }
-        console.log(this.formData)
       } catch (err) {
         this.setSnackbar({
           message: err.message,
