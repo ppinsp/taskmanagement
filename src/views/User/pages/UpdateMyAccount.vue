@@ -150,14 +150,9 @@ export default {
       phoneNumber: '',
       username: '',
       department: '',
-      photo: null
+      photo: null,
+      role: ''
     },
-    roles: [
-      'admin',
-      'hr',
-      'sa',
-      'user'
-    ],
     validation: {
       title: [
         v => !!v || 'This feild is require.'
@@ -223,7 +218,8 @@ export default {
           phoneNumber: data.phoneNumber,
           username: data.username,
           department: data.department.id,
-          photo: data.photo
+          photo: data.photo,
+          role: data.role
         }
       } catch (err) {
         this.setSnackbar({
