@@ -73,6 +73,8 @@
   </v-navigation-drawer>
 </template>
 
+
+
 <script>
 import menu from '@/utils/js/menu'
 import { getUser } from '@/utils/js/Auth'

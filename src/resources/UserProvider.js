@@ -80,4 +80,9 @@ export default class UserProvider extends HttpRequest {
     this.setHeader(getAuthToken())
     return this.delete(`/teams?id=${id}`)
   }
+
+  getuserrequriement(id){
+    this.setHeader(getAuthToken())
+    return this.get(`/users/fixuser/${id}`)
+  }
 }

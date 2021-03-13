@@ -24,11 +24,7 @@ export default {
       icon: 'mdi-layers-triple',
       roles: ['admin', 'sa']
     },
-    // {
-    //   title: 'Task',
-    //   to: '',
-    //   icon: 'mdi-weather-tornado'
-    // },
+  
     // {
     //   title: 'Sprint Backlog',
     //   to: '',

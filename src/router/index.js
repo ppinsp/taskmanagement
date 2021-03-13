@@ -5,6 +5,7 @@ import User from './modules/user'
 import Team from './modules/team'
 import Project from './modules/project'
 import Department from './modules/department'
+// import Development from './modules/development'
 import auth from '@/utils/js/Auth'
 
 Vue.use(VueRouter)
@@ -18,7 +19,8 @@ const routes = [
       User,
       Team,
       Project,
-      Department
+      Department,
+      // Development
     ]
   },
   {

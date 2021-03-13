@@ -97,6 +97,7 @@ export default {
     async getProject () {
       try {
         const { data } = await projectService.getProjectById(this.projectId)
+        console.log(data)
         this.project = data
       } catch (err) {
         this.setSnackbar({

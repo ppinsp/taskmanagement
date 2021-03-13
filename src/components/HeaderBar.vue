@@ -29,6 +29,7 @@
               mdi-account-circle
             </v-icon>
           </v-avatar>
+          
         </v-btn>
       </template>
       <v-list v-if="ready">

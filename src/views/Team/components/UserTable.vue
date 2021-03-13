@@ -93,7 +93,7 @@ export default {
         this.total = data.count
         this.data = data.results
       } catch (err) {
-        alert(err)
+        console.log(err)
       } finally {
         this.loading = false
       }

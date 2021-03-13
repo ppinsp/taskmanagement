@@ -25,4 +25,11 @@ export default class ProjectProvider extends HttpRequest {
     this.setHeader(getAuthToken())
     return this.delete(`/projects?id=${id}`)
   }
+
+  getProjectUserFind(id){
+    this.setHeader(getAuthToken())
+    return this.get(`/projects/userfind/${id}`)
+
+  }
+
 }

@@ -168,7 +168,8 @@ export default {
     roles: [
       'admin',
       'hr',
-      'sa'
+      'sa',
+      'dev'
     ],
     validation: {
       title: [

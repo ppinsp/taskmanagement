@@ -80,7 +80,6 @@ export default {
         this.loading = true
         const { data } = await authService.login(this.username, this.password)
         await setAuthUser(data.accessToken, data.tokenExpire)
-        console.log(data)
         await setUserData(data)
         setTimeout(() => {
           this.$router.push('/')

@@ -52,60 +52,60 @@
 </template>
 
 <script>
-import ProjectProvider from '@/resources/ProjectProvider'
+// import ProjectProvider from '@/resources/ProjectProvider'
 
-const projectService = new ProjectProvider()
-export default {
-  data: () => ({
-    searchText: '',
-    loading: false,
-    perPage: 15,
-    total: 15,
-    page: 1,
-    data: [],
-    headers: [
-      { text: 'Id', align: 'start', sortable: false, value: 'id' },
-      { text: 'Name', value: 'name' },
-      { text: 'Team', value: 'teamName' },
-      { text: 'Detail', value: 'detail' },
-      { text: 'option', value: 'option', width: 40, align: 'center' }
-    ]
-  }),
-  computed: {
-    mapData () {
-      return this.data.map(d => ({
-        id: d.id,
-        name: d.name,
-        detail: d.detail,
-        teamName: d.team ? d.team.name : ''
-      }))
-    }
-  },
-  methods: {
-    changePage (page) {
-      this.page = page
-      this.getData()
-    },
-    searchItem () {
-      this.page = 1
-      this.getData()
-    },
-    async getData () {
-      this.loading = true
-      try {
-        const query = `page=${this.page}&limit=${this.perPage}&search=${this.searchText}`
-        const { data } = await projectService.getAllProject(query)
-        this.total = data.count
-        this.data = data.results
-      } catch (err) {
-        console.log(err)
-      } finally {
-        this.loading = false
-      }
-    }
-  },
-  mounted () {
-    this.getData()
-  }
-}
+// const projectService = new ProjectProvider()
+// export default {
+//   data: () => ({
+//     searchText: '',
+//     loading: false,
+//     perPage: 15,
+//     total: 15,
+//     page: 1,
+//     data: [],
+//     headers: [
+//       { text: 'Id', align: 'start', sortable: false, value: 'id' },
+//       { text: 'Name', value: 'name' },
+//       { text: 'Team', value: 'teamName' },
+//       { text: 'Detail', value: 'detail' },
+//       { text: 'option', value: 'option', width: 40, align: 'center' }
+//     ]
+//   }),
+//   computed: {
+//     mapData () {
+//       return this.data.map(d => ({
+//         id: d.id,
+//         name: d.name,
+//         detail: d.detail,
+//         teamName: d.team ? d.team.name : ''
+//       }))
+//     }
+//   },
+//   methods: {
+//     changePage (page) {
+//       this.page = page
+//       this.getData()
+//     },
+//     searchItem () {
+//       this.page = 1
+//       this.getData()
+//     },
+//     async getData () {
+//       this.loading = true
+//       try {
+//         const query = `page=${this.page}&limit=${this.perPage}&search=${this.searchText}`
+//         const { data } = await projectService.getAllProject(query)
+//         this.total = data.count
+//         this.data = data.results
+//       } catch (err) {
+//         console.log(err)
+//       } finally {
+//         this.loading = false
+//       }
+//     }
+//   },
+//   mounted () {
+//     this.getData()
+//   }
+// }
 </script>
