@@ -30,7 +30,7 @@
       <v-container>
         <v-row dense>
           <v-col cols="3" v-for="(item, index) in status" :key="index">
-            <v-btn class="ma-2" color="cyan">
+            <v-btn color="cyan">
               <span v-if="item.isEdit === false" style="color: white">
                 {{ item.name }}
               </span>
@@ -63,22 +63,20 @@
           <v-col cols="3" v-if="isNew">
             <v-text-field v-model="newStatus"></v-text-field>
           </v-col>
-          <v-col cols="1" v-else-if="!isNew">
+          <v-col cols="3" v-else-if="!isNew">
             <v-btn
               @click="isNew = true"
               :loading="loading"
               color="grey darken-1"
-              class="ma-2"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </v-col>
-          <v-col cols="1" v-if="isNew">
+          <v-col cols="3" v-if="isNew">
             <v-btn
               @click="createStatusTask()"
               :loading="loading"
               color="grey darken-1"
-              class="ma-2"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -101,7 +99,7 @@
     <v-card class="mx-auto my-10" max-width="270" v-for="(item, index) in requirement" :key="index">
       
       <v-card-title>{{item.detail}}</v-card-title>
-        <v-icon medium color=" grey darken-1" @click="removeRequirement(item.id, index)">mdi-bitbucket</v-icon>
+      <v-icon medium color=" grey darken-1" @click="removeRequirement(item.id, index)">mdi-bitbucket</v-icon>
      
     </v-card>
 

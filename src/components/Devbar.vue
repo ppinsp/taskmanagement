@@ -58,7 +58,7 @@
           <v-divider></v-divider>
           <v-card-actions>
             <v-btn color="blue darken-1" text @click="dialog = false">
-              Cancle
+              Cancel
             </v-btn>
             <v-btn color="blue darken-1" text @click="updateRequirement()">
               Confirm
@@ -115,7 +115,6 @@
           <!-- <v-icon large color="blue darken-2" @click="clickme()">mdi-bell-ring-outline</v-icon> -->
 
           <v-card class="mx-auto" max-width="300" color="#FFFF" outlined>
-            <v-icon medium color=" grey darken-1">mdi-calendar-clock</v-icon>
             <p style="color: black">
               {{ requirement.detail }}
             </p>
