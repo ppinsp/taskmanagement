@@ -19,9 +19,9 @@
       <v-col cols="6" md="2" >
         <v-btn block color="warning" :loading="loading" @click="$router.push({ name: 'UpdateCompany', params: { id: company.id }})">Update</v-btn>
       </v-col>
-     <!-- <v-col cols="6" md="2">
-        <v-btn block color="pink" :loading="loading" @click="confirmRemove">Delete</v-btn>
-      </v-col> -->
+     <v-col cols="6" md="2">
+        <v-btn block color="pink" :loading="loading" @click="confirmRemove(company.id)">Delete</v-btn>
+      </v-col>
     </v-row>
     <v-row>
       <v-col>
@@ -100,9 +100,28 @@ export default {
     ...mapActions({
       setSnackbar: 'Style/setSnackbar'
     }),
-    // confirmRemove () {
-    //   this.modalConfirm = true
-    // },
+    async confirmRemove (id) {
+      this.loading = true
+      // this.modalConfirm = true
+      try {
+        const result = await companyService.deleteCompanyById(id)
+        if (!result) {
+          throw { message: 'somthing\'s wrong please try again' }
+        }
+        this.setSnackbar({
+          message: 'success',
+          type: 'green',
+          active: true
+        })
+        this.$router.go(-1)
+      } catch (error) {
+        this.setSnackbar({
+          message: error.message,
+          type: 'pink',
+          active: true
+        })
+      }
+    },
     async getCompany () {
       try {
         const { data } = await companyService.getCompanyById(this.companyId)

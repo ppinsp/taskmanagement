@@ -27,10 +27,10 @@ export default class CompanyProvider extends HttpRequest {
     //     return this.put(`/statustask/${id}`, payload)
     // }
 
-    // deleteStatusTaskBar (id) {
-    //     this.setHeader(getAuthToken())
-    //     return this.delete(`/statustask?id=${id}`)
-    // }
+    deleteCompanyById(id) {
+        this.setHeader(getAuthToken())
+        return this.delete(`/company?id=${id}`)
+    }
     // createStatusTaskBar (payload) {
     //     this.setHeader(getAuthToken())
     //     return this.post(`/statustask`, payload)

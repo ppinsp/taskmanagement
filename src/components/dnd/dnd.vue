@@ -202,7 +202,7 @@ export default {
     this.showResultTest();
     this.showRequirement();
     this.user = getUser();
-    await this.getData();
+    // await this.getData();
   },
   methods: {
     async showRequirement() {
