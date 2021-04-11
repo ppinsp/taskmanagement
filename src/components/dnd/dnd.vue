@@ -3,10 +3,10 @@
     <div class="row">
       <!------------- - card backlog -------------->
       <div class="col-md-3">
-        <v-card>
+        <v-card color="#E0F7FA">
           <v-card-title>Backlog</v-card-title>
           <v-card-text class="text--primary">
-            <draggable class="v-list-group" :list="arrBacklog" group="tasks">
+            <draggable class="v-list-group fig-height" :list="arrBacklog" group="tasks">
               <div
                 class="list-group-item"
                 v-for="element in arrBacklog"
@@ -27,7 +27,7 @@
         <v-card>
           <v-card-title>InProgress</v-card-title>
           <v-card-text class="text--primary">
-            <draggable class="v-list-group" :list="arrInProgress" group="tasks">
+            <draggable class="v-list-group fig-height" :list="arrInProgress" group="tasks">
               <div
                 class="list-group-item"
                 v-for="element in arrInProgress"
@@ -43,7 +43,7 @@
                     <v-row>
                       <v-col>
                         <!-- <v-chip :color="orange"> -->
-                          <v-chip>
+                        <v-chip>
                           {{ timer }}
                         </v-chip>
                       </v-col>
@@ -66,7 +66,7 @@
                           fab
                           small
                           dark
-                          @click="$emit('stop')"
+                          @click="$emit('stop', timer)"
                         >
                           <v-icon>mdi-motion-pause</v-icon>
                         </v-btn>
@@ -84,7 +84,7 @@
         <v-card>
           <v-card-title>Done</v-card-title>
           <v-card-text class="text--primary">
-            <draggable class="v-list-group" :list="arrDone" group="tasks">
+            <draggable class="v-list-group fig-height" :list="arrDone" group="tasks">
               <div
                 class="list-group-item"
                 v-for="element in arrDone"
@@ -100,7 +100,7 @@
                         small
                         color="primary"
                         dark
-                        @click.stop="dialog = true , updateReqDone()"
+                        @click.stop="(dialog = true), updateReqDone()"
                       >
                         Ready to UAT
                       </v-btn>
@@ -109,8 +109,7 @@
                           <v-card-title class="headline">
                             Your task will be test
                           </v-card-title>
-                          <v-card-text
-                          >
+                          <v-card-text>
                             Will notify you of the test results in Unit
                             Automation Test ( UAT )
                           </v-card-text>
@@ -141,7 +140,7 @@
           <v-card-title>Result Test</v-card-title>
           <v-card-text class="text--primary">
             <draggable
-              class="v-list-group"
+              class="v-list-group fig-height"
               :list="arrUnitAutomationTest"
               group="tasks"
             >
@@ -154,6 +153,17 @@
                   <v-card-text class="mt-1">
                     {{ element.name }}
                   </v-card-text>
+                  <v-card-actions>
+                    <div
+                      v-for="(review, index) in element.review"
+                      :key="`review-index-${index}`"
+                    >
+                      <v-card-text>
+                        <v-icon class="mr-2">mdi-account-star</v-icon>
+                        {{ review }}
+                      </v-card-text>
+                    </div>
+                  </v-card-actions>
                 </v-card>
               </div>
             </draggable>
@@ -231,8 +241,9 @@ export default {
 
     async showResultTest() {
       const { data } = await requirementService.getRepair(1); //ส่งค่าของ user_ID
-      data.map((R) => {
-        this.arrUnitAutomationTest.push({ name: R.detail });
+      data.forEach((R) => {
+        const review = R.review.map((review) => review.opinion);
+        this.arrUnitAutomationTest.push({ name: R.detail, review });
       });
     },
     async updateReqDone() {
@@ -265,3 +276,8 @@ export default {
   },
 };
 </script>
+<style>
+.fig-height{
+  min-height: 360px;
+}
+</style>

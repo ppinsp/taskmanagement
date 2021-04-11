@@ -7,7 +7,7 @@
           <v-card-title>Waiting for Test</v-card-title>
           <v-card-text class="text--primary">
             <draggable
-              class="v-list-group"
+              class="v-list-group fig-height"
               :list="arrWaiting"
               group="tasks"
               @change="onMoveCallback"
@@ -40,7 +40,7 @@
         <v-card width="100%">
           <v-card-title>Testing</v-card-title>
           <v-card-text class="text--primary">
-            <draggable class="v-list-group" :list="arrUAT" group="tasks">
+            <draggable class="v-list-group fig-height" :list="arrUAT" group="tasks">
               <div
                 class="list-group-item"
                 v-for="element in arrUAT"
@@ -231,7 +231,7 @@
           <v-card-title>Pre Production</v-card-title>
           <v-card-text class="text--primary">
             <draggable
-              class="v-list-group"
+              class="v-list-group fig-height"
               :list="arrpreProduction"
               group="tasks"
             >
@@ -340,3 +340,9 @@ export default {
   },
 };
 </script>
+<style>
+.fig-height{
+  min-height: 360px;
+}
+</style>
+

@@ -1,13 +1,69 @@
 <template>
   <v-card class="pb-0 mb-0" max-width="100%" height="100%">
-    <v-card-title class="title font-weight-regular justify-space-between">
-      <span>{{ currentTitle }}</span>
-      <v-avatar
+    <v-card-title class="title font-weight-regular justify-center">
+      <span>
+        <!-- Table Shere Thing -->
+        <div class="mt-6">
+          <v-btn
+            color="primary"
+            dark
+            icon
+            justify="center"
+            @click.stop="dialog = true"
+          >
+            <v-icon size="80" class="mt-6">
+              mdi-thought-bubble
+            </v-icon>
+          </v-btn>
+
+          <v-dialog v-model="dialog" width="450">
+            <v-card>
+              <v-card-text>
+                <v-icon> </v-icon>
+              </v-card-text>
+              <v-card-text>
+                <v-icon justify-center>
+                  mdi-head-dots-horizontal
+                </v-icon>
+              </v-card-text>
+              <v-card-text>
+                <v-data-table
+                  :headers="headers"
+                  :items="messages"
+                  item-key="name"
+                  class="elevation-1 justify-center"
+									
+                >
+                </v-data-table>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <div justify-center mr-5>
+                  <v-text-field
+                    class="mr-6"
+                    v-model="message"
+                    filled
+                    clear-icon="mdi-send"
+                    clearable
+                    label="Sent message"
+                    type="text"
+                    @click:clear="sendMessage"
+                    solo-inverted
+                  ></v-text-field>
+                </div>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </div>
+        <!-- {{ currentTitle }} -->
+      </span>
+      <!-- <v-avatar
         color="primary lighten-2"
         class="subheading white--text"
         size="24"
         v-text="step"
-      ></v-avatar>
+      ></v-avatar> -->
     </v-card-title>
 
     <v-window v-model="step">
@@ -74,17 +130,80 @@
                                                 <div>
                                                   <!-- <v-chip :color="pink"> -->
                                                   <v-chip>
-                                                    <span v-if="requirement.task">{{requirement.task.name}}</span>
+                                                    <span
+                                                      v-if="requirement.task"
+                                                      >{{
+                                                        requirement.task.name
+                                                      }}</span
+                                                    >
                                                     <span v-else>Empty</span>
                                                   </v-chip>
                                                 </div>
                                                 <br />
-                                                <v-icon>
+                                                <!------------------- icon  show Image --------------------->
+                                                <v-icon @click="dialogImg = true">
                                                   mdi-folder-multiple-image
                                                 </v-icon>
-                                                <v-icon class="ml-4">
+                                                <v-dialog
+                                                  v-model="dialogImg"
+                                                  max-width="290"
+                                                >
+                                                  <v-card>
+                                                    <v-card-title
+                                                      class="headline"
+                                                    >
+                                                      imageUpload
+                                                    </v-card-title>
+
+                                                    <v-card>
+                                                      <v-avatar
+                                                        class="ma-3"
+                                                        size="125"
+                                                        tile
+                                                      >
+                                                        <img
+                                                          :src="
+                                                            requirement.imageUpload
+                                                          "
+                                                          width="300"
+                                                          alt=""
+                                                        />
+                                                      </v-avatar>
+                                                    </v-card>
+                                                  </v-card>
+                                                </v-dialog>
+                                                <!------------------- end --------------------->
+                                                <!------------------- icon  show file --------------------->
+                                                <v-icon
+                                                  class="ml-4"
+                                                  @click="dialogFile = true"
+                                                >
                                                   mdi-folder-edit
                                                 </v-icon>
+                                                <v-dialog
+                                                  v-model="dialogFile"
+                                                  max-width="290"
+                                                >
+                                                  <v-card>
+                                                    <v-card-title
+                                                      class="headline"
+                                                    >
+                                                      fileUpload
+                                                    </v-card-title>
+                                                    <v-card-text>
+                                                      <a
+                                                        :href="
+                                                          requirement.fileUpload
+                                                        "
+                                                        target="_blank"
+                                                        >{{
+                                                          requirement.fileUpload
+                                                        }}
+                                                      </a>
+                                                    </v-card-text>
+                                                  </v-card>
+                                                </v-dialog>
+                                                <!------------------- end --------------------->
                                               </v-flex>
                                             </v-layout>
                                             <v-divider light></v-divider>
@@ -216,74 +335,6 @@
                 </tbody>
               </v-simple-table>
             </v-col>
-
-            <!-- Table Shere Thing -->
-            <v-col class="ml-6">
-              <v-dialog
-                v-model="dialogMassage"
-                hide-overlay
-                transition="dialog-bottom-transition"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    color="primary"
-                    dark
-                    v-bind="attrs"
-                    v-on="on"
-                    icon
-                    justify="center"
-                  >
-                    <v-icon size="80">
-                      mdi-thought-bubble
-                    </v-icon>
-                  </v-btn>
-                </template>
-                <v-card>
-                  <v-toolbar dark color="primary">
-                    <v-spacer></v-spacer>
-                    <v-toolbar-items>
-                      <v-btn icon dark @click="dialogMassage = false">
-                        <v-icon>mdi-close</v-icon>
-                      </v-btn>
-                    </v-toolbar-items>
-                  </v-toolbar>
-
-                <v-card class="ma-6">
-                  <v-list-item-content class="justify-center">
-                    <div class="mx-auto text-center">
-                      <div>
-                        <v-data-table
-                          :headers="headers"
-                          :items="messages"
-                          item-key="name"
-                          hide-default-footer
-                          class="elevation-1"
-                        >
-                        </v-data-table>
-                        <!-- sent message -->
-                        <v-simple-table>
-                          <template>
-                            <tr>
-                              <v-text-field
-                                v-model="message"
-                                filled
-                                clear-icon="mdi-send"
-                                clearable
-                                label="Sent message"
-                                type="text"
-                                @click:clear="sendMessage"
-                              ></v-text-field>
-                            </tr>
-                          </template>
-                        </v-simple-table>
-                      </div>
-                    </div>
-                  </v-list-item-content>
-                </v-card>
-
-                </v-card>
-              </v-dialog>
-            </v-col>
           </v-row>
         </v-container>
       </v-window-item>
@@ -297,11 +348,6 @@
           @start="start"
           @stop="stop"
         />
-      </v-window-item>
-
-      <!------------------------------------------------ Customer Page ------------------------------------------------>
-      <v-window-item :value="3">
-        <div class="pa-4 text-center">Customer Review</div>
       </v-window-item>
     </v-window>
     <!-- Customer Page -->
@@ -353,6 +399,8 @@ export default {
     postList: [],
     dataId: "",
     dialog: false,
+		dialogImg: false,
+		dialogFile: false,
     userlist: [],
     team: 0,
     valid: false,
@@ -390,6 +438,8 @@ export default {
     notifications: false,
     sound: true,
     widgets: false,
+
+    dialogImage: false,
   }),
 
   computed: {
@@ -409,7 +459,7 @@ export default {
           text: "Shere THING",
           align: "start",
           sortable: false,
-          value: "message",
+          value: "massages",
         },
       ];
     },
@@ -448,10 +498,10 @@ export default {
       }
     },
     async getMessage() {
-      const { data } = await chatService.getChat()
-      if (data) {
-        this.messages = data
-      }
+      const { data } = await chatService.getChat();
+      data.map((m) => {
+        this.messages.push({ massages: m.massages });
+      });
     },
     async dialogControl() {
       await this.addrequirementuser();
@@ -599,12 +649,12 @@ export default {
       }
     },
 
-     async sendMessage() {
-      const result = await chatService.createChat({ massages: this.message })
+    async sendMessage() {
+      const result = await chatService.createChat({ massages: this.message });
       this.resetIcon();
       this.clearMessage();
       if (result) {
-        this.$router.go()
+        this.$router.go();
       }
     },
     clearMessage() {
@@ -619,10 +669,9 @@ export default {
         : this.iconIndex++;
     },
 
-    //Dnd Timer เวลามันยังไม่เริ่มที่ 00:00:00
     start: function() {
       requirementService.updateRequirement(
-        21, //ส่งRequirement id นั้นๆไป
+        8, //ส่งRequirement id นั้นๆไป
         {
           task: 1,
         }
@@ -634,11 +683,13 @@ export default {
       }
     },
     //ส่งเวลา00:00:00 เข้าapi เส้น report
-    stop: function() {
+    stop: function(timer) {
       window.clearInterval(this.ticker);
       this.currentTimer = 0;
       this.formattedTime = "00:00:00";
       this.timerState = "stopped";
+
+      console.log(timer); //ค่าเวลาจาก component dnd      ส่ง requirement_id และเวลาลงที่ createReport ใน ReportPovider
     },
     tick: function() {
       this.ticker = setInterval(() => {
@@ -649,19 +700,19 @@ export default {
       }, 1000);
     },
     formatTime(times) {
-      let hours = '00'
-      let minutes = '00'
-      let seconds = '00'
-      hours += Math.floor(times / 3600).toString()
-      hours = hours.slice(-2)
-      times = times - Number(hours * 3600)
-      minutes += Math.floor(times / 60).toString()
-      minutes = minutes.slice(-2)
-      times = times - Number(minutes * 60)
-      seconds += times
-      seconds = seconds.slice(-2)
+      let hours = "00";
+      let minutes = "00";
+      let seconds = "00";
+      hours += Math.floor(times / 3600).toString();
+      hours = hours.slice(-2);
+      times = times - Number(hours * 3600);
+      minutes += Math.floor(times / 60).toString();
+      minutes = minutes.slice(-2);
+      times = times - Number(minutes * 60);
+      seconds += times;
+      seconds = seconds.slice(-2);
 
-      return `${hours}:${minutes}:${seconds}`
+      return `${hours}:${minutes}:${seconds}`;
     },
     async addUserToRequirement(requirement_id, user_id) {
       await requirementService.updateRequirement(requirement_id, {
@@ -704,7 +755,7 @@ export default {
     // this.getProject();
     this.user = getUser();
     this.getStatus();
-    this.getMessage()
+    this.getMessage();
     await this.getData();
     // console.log(this.user.sub)
   },

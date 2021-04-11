@@ -7,7 +7,7 @@ export default class CompanyProvider extends HttpRequest {
     }
     createCompany (payload) {
         this.setHeader(getAuthToken()) //เข้าใช้ api 
-       return this.post(`/company`, payload)
+      return this.post(`/company`, payload)
       }
       getAllCompany (query) {
         this.setHeader(getAuthToken())
