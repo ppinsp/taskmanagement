@@ -14,19 +14,26 @@
             transition="dialog-bottom-transition"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-card v-bind="attrs" v-on="on" class="ma-8" max-width="200" min-width="200">
+              <v-card
+                v-bind="attrs"
+                v-on="on"
+                class="ma-8"
+                max-width="200"
+                min-width="200"
+              >
                 <v-card-actions> </v-card-actions>
                 <!----------------------- cade of Project name ------------------------->
                 <v-card-title
                   class="pb-0 mb-3 justify-center "
                   style="font-family:'Google Sans',Roboto,sans-serif; line-height:1.1; "
+                  @click="showReportReq(element.ProjectId)"
                 >
-                  {{ element.name }}
+                  {{ element.projectName }}
                 </v-card-title>
                 <!-- <v-divider></v-divider> -->
                 <v-card-text class="text--secondary rtl">
                   <!-- <v-icon>mdi-clock-start</v-icon> -->
-                  timeAll
+                  TimeAll
                 </v-card-text>
 
                 <!----------------------- end ------------------------->
@@ -37,7 +44,7 @@
               <v-toolbar dark color="primary">
                 <v-toolbar-title>
                   <div justify-center>
-                    Detail of { Project Name }
+                    <!-- Detail of {{ nameProject }} -->
                   </div>
                 </v-toolbar-title>
                 <v-spacer></v-spacer>
@@ -85,13 +92,15 @@ export default {
         sortable: false,
         value: "reqName",
       },
-      { text: "Time", value: "sum" },
+      { text: "Time", value: "formatTime" },
     ],
+    // nameProject: '',
+    Time: [],
   }),
   mounted() {
     this.showReport();
     this.showReportReq();
-    //this.formatTime(times);
+    this.formatTime();
   },
   methods: {
     async showReport() {
@@ -100,33 +109,39 @@ export default {
       //     const project = p.project.map((project) => project.name);
       //     this.arrReport.push({ project });
       //   });
-      this.arrReport = data;
-    },
-
-    async showReportReq() {
-      const { data }  = await ReportService.getReportReq(1); /// ส่ง project Id ที่คลิก 
-      //console.log('data', data)
-
-      
-this.arrReqT = data.map((r) => {
-        const report = r.report.length > 0 ? r.report.reduce((total, acc) => total + this.timeCompute(acc.time), 0) : 0
-        const reqName = r.detail
-        //const sumtime = sumtime + report 
-        this.formatTime({report});
-        //console.log('req',sumtime)
-      return { ...r, report, reqName}
+      data.map((project) => {
+        this.arrReport.push({
+          projectName: project.name,
+          ProjectId: project.id,
+        });
       });
 
-      
-      
-      
-      //console.log('arrReq', this.arrReqT)
+      //this.arrReport = data;
+      //console.log('Project',data.id)
+    },
+
+    async showReportReq(ProjectId) {
+      console.log("Project", ProjectId);
+      const { data } = await ReportService.getReportReq(ProjectId);
+      //console.log('data', data)
+      this.arrReqT = data.map((r) => {
+        const report =
+          r.report.length > 0
+            ? r.report.reduce(
+                (total, acc) => total + this.timeCompute(acc.time),
+                0
+              )
+            : 0;
+        const reqName = r.detail;
+        this.formatTime({ report });
+        return { ...r, report, reqName };
+      });
     },
     timeCompute(times) {
-      const mapped = times.split(':')
-      return (+mapped[0] * 360) + (+mapped[1] * 60) + (+mapped[2])
+      const mapped = times.split(":");
+      return +mapped[0] * 360 + +mapped[1] * 60 + +mapped[2];
     },
-    
+
     //////////////////////////////////////////////
     formatTime(times) {
       //console.log('time',times['report'])
@@ -134,33 +149,24 @@ this.arrReqT = data.map((r) => {
       let minutes = "00";
       let seconds = "00";
       let sum;
-
-      if(times){
-
-      hours = Math.floor(Number(times['report']) / 3600);
-      //hours = hours.slice(-2);
-      //console.log('hou',hours)
-      times['report'] = times['report'] - Number(hours * 3600);
-      minutes = Math.floor(Number(times['report']) / 60);
-      //minutes = minutes.slice(-2);
-      times['report'] = times['report'] - Number(minutes * 60);
-      seconds = times['report'];
-      //seconds = seconds.slice(-2);
-      sum = `${hours}:${minutes}:${seconds}`;
-      console.log('h',sum)
-      
+      if (times) {
+        hours = Math.floor(Number(times["report"]) / 3600);
+        times["report"] = times["report"] - Number(hours * 3600);
+        minutes = Math.floor(Number(times["report"]) / 60);
+        times["report"] = times["report"] - Number(minutes * 60);
+        seconds = times["report"];
+        sum = `${hours} Hours ${minutes} minutes ${seconds} seconds`;
+        
+        //console.log("hffsfsdfsdf", sum);
       }
-      return  (sum) ;
+      return sum;
+      
     },
-
-    
-    
-
   },
 };
 </script>
-<style >
-  ma-8{
-    min-width: 250px;
-  }
+<style>
+.ma-8 {
+  min-width: 250px;
+}
 </style>

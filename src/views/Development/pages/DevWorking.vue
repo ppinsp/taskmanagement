@@ -9,14 +9,14 @@
             dark
             icon
             justify="center"
-            @click.stop="dialog = true"
+            @click.stop="dialogThink = true"
           >
             <v-icon size="80" class="mt-6">
               mdi-thought-bubble
             </v-icon>
           </v-btn>
 
-          <v-dialog v-model="dialog" width="450">
+          <v-dialog v-model="dialogThink" width="450">
             <v-card>
               <v-card-text>
                 <v-icon> </v-icon>
@@ -400,6 +400,7 @@ export default {
     dialog: false,
 		dialogImg: false,
 		dialogFile: false,
+    dialogThink:false,
     userlist: [],
     team: 0,
     valid: false,
@@ -509,7 +510,7 @@ export default {
       this.dialog = true;
       try {
         this.selectedRequirement = requirement_id;
-        console.log("user_id", user_id);
+        console.log("user_idddd", user_id);
         if (user_id) {
           this.selectedUser = user_id;
         }
@@ -668,9 +669,10 @@ export default {
         : this.iconIndex++;
     },
 
-    start: function() {
+    start: function(req_Id) {
+      console.log('r',req_Id)
       requirementService.updateRequirement(
-        8, //ส่งRequirement id นั้นๆไป
+        req_Id, 
         {
           task: 1,
         }
@@ -681,14 +683,13 @@ export default {
         this.timerState = "running";
       }
     },
-    //ส่งเวลา00:00:00 เข้าapi เส้น report
-    stop: function(timer) {
+    stop: function(timer, reqId) {
       window.clearInterval(this.ticker);
       this.currentTimer = 0;
       this.formattedTime = "00:00:00";
       this.timerState = "stopped";
-
-      console.log(timer); //ค่าเวลาจาก component dnd      ส่ง requirement_id และเวลาลงที่ createReport ใน ReportPovider
+      console.log('time',timer,'id',reqId);    
+      // ส่ง requirement_id และเวลาลงที่ createReport ใน ReportPovider
     },
     tick: function() {
       this.ticker = setInterval(() => {

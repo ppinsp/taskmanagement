@@ -76,7 +76,8 @@
                               </v-btn>
                             </template>
                             <v-card>
-                              <v-card-title class="headline grey lighten-2">
+                              <v-card-title class="headline grey lighten-2"
+                              >
                                 Ready to Pre Production
                               </v-card-title>
                               <v-card-text>
@@ -99,7 +100,7 @@
                                 <v-btn
                                   color="primary"
                                   text
-                                  @click=" dialog = false ,updatePrepoduction()"
+                                  @click=" updatePrepoduction(element.id),dialog = false"
                                 >
                                   Yes, task ready
                                 </v-btn>
@@ -107,7 +108,7 @@
                                 <v-btn
                                   color="error"
                                   text
-                                  @click="dialog = false, updateTesting()"
+                                  @click="updateTesting(element.id),dialog = false"
                                 >
                                   No
                                 </v-btn>
@@ -155,7 +156,7 @@
                                 <v-btn
                                   color="primary"
                                   text
-                                  @click="dialogErr = false , updateRepair()"
+                                  @click=" updateRepair(element.id),dialogErr = false "
                                 >
                                   Yes, Send back
                                 </v-btn>
@@ -163,7 +164,7 @@
                                 <v-btn
                                   color="error"
                                   text
-                                  @click="dialogErr = false, updateTesting()"
+                                  @click="updateTesting(element.id),dialogErr = false"
                                 >
                                   No
                                 </v-btn>
@@ -301,39 +302,40 @@ export default {
       else return "green";
     },
 
-    async updatePrepoduction() {
+    async updatePrepoduction(reqment_Id) {
+      console.log('req',reqment_Id)
       await requirementService.updateRequirement(
-        8,{//ส่งRequirement id นั้นๆไป
+        reqment_Id,{//ส่งRequirement id นั้นๆไป
           task: 4
         }
       )
     },
-    async updateTesting() {
+    async updateTesting(reqment_Id) {
       await requirementService.updateRequirement(
-        8,{//ส่งRequirement id นั้นๆไป
+        reqment_Id,{//ส่งRequirement id นั้นๆไป
           task: 3
         }
       )
     },
-    async updateRepair() {
+    async updateRepair(reqment_Id) {
       await requirementService.updateRequirement(
-        8,{//ส่งRequirement id นั้นๆไป
+      reqment_Id,{//ส่งRequirement id นั้นๆไป
           task: 5
         }
       )
     },
 
     async showPrepo(){
-      const { data } = await requirementService.getPrepo(1)
+      const { data } = await requirementService.getPrepo(1)//user_id
       data.map((P) => {
-        this.arrpreProduction.push({name: P.detail});
+        this.arrpreProduction.push({name: P.detail, id: P.id});
       })
     },
 
     async showTesting(){
-      const { data } = await requirementService.getTesting(1);
+      const { data } = await requirementService.getTesting(1);//user_id
       data.map((T) => {
-        this.arrUAT.push({name: T.detail})
+        this.arrUAT.push({name: T.detail, id: T.id})
       })
     }
 

@@ -55,7 +55,7 @@
                           fab
                           small
                           dark
-                          @click="$emit('start')"
+                          @click="$emit('start', element.id)"
                         >
                           <v-icon>mdi-motion-play</v-icon>
                         </v-btn>
@@ -67,15 +67,20 @@
                           fab
                           small
                           dark
-                          @click="$emit('stop', timer )"
+                          @click="$emit('stop', timer, element.id )"
                         >
                           <v-icon>mdi-motion-pause</v-icon>
                         </v-btn>
                       </v-col>
                     </v-row>
                   </v-card-actions>
+
+
+                  
                 </v-card>
               </div>
+
+
             </draggable>
           </v-card-text>
         </v-card>
@@ -101,7 +106,7 @@
                         small
                         color="primary"
                         dark
-                        @click.stop="(dialog = true), updateReqDone()"
+                        @click.stop="(dialog = true), updateReqDone(element.id)"
                       >
                         Ready to UAT
                       </v-btn>
@@ -201,6 +206,7 @@ export default {
     arrUnitAutomationTest: [],
     ////////////////
     dialog: false,
+    user: '',
   }),
   computed: {
     userId() {
@@ -216,8 +222,9 @@ export default {
     // await this.getData();
   },
   methods: {
-    async showRequirement() {
-      const { data } = await requirementService.getRequirementByUserId(1); //ส่งค่าของ user_ID
+    async showRequirement(user) {
+      console.log('user',user)
+      const { data } = await requirementService.getRequirementByUserId(user); //ส่งค่าของ user_ID
       data.map((n) => {
         // console.log(n.id);
         if (n.task == null) {
@@ -228,15 +235,17 @@ export default {
 
     async showInPro() {
       const { data } = await requirementService.getReqInprogress(1); //ส่งค่าของ user_ID
+      console.log('data',data)
       data.map((I) => {
-        this.arrInProgress.push({ name: I.detail });
+        this.arrInProgress.push({ name: I.detail, id: I.id });
       });
+
     },
 
     async showDone() {
       const { data } = await requirementService.getReqDone(1); //ส่งค่าของ user_ID
       data.map((D) => {
-        this.arrDone.push({ name: D.detail });
+        this.arrDone.push({ name: D.detail , id: D.id});
       });
     },
 
@@ -247,9 +256,9 @@ export default {
         this.arrUnitAutomationTest.push({ name: R.detail, review });
       });
     },
-    async updateReqDone() {
+    async updateReqDone(req_id) {
       await requirementService.updateRequirement(
-        8, //ส่งRequirement id นั้นๆไป
+        req_id,
         {
           task: 2,
         }
