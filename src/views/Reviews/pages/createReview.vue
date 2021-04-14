@@ -204,7 +204,7 @@
                         <v-row class="mt-5">
                           <v-text-field
                             v-model="last"
-                            label="Last Name"
+                            label="Sent Comment"
                             solo-inverted
                             class="ml-3"
                           >

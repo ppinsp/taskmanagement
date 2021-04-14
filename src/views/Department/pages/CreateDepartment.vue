@@ -88,6 +88,7 @@ export default {
       return this.$route.params.id ? true : false
     },
     departmentId () {
+      console.log('id', this.$route.params.id)
       return this.$route.params.id ? this.$route.params.id : 0
     }
   },

@@ -40,29 +40,28 @@
           class="elevation-1" />
       </v-col>
     </v-row>
-    <!-- <modal-confirm
+    <modal-confirm
       :active="modalConfirm"
       :confirm-text="`Confirm`"
       :title="'Confirm delete'"
       :message="`Confirm delete company ${company.name}.`"
       :show-cancel="true"
       @onCancel="() => { modalConfirm = false }"
-      @onConfirm="removeDepartment" /> -->
+     />
   </v-container>
 </template>
 
 <script>
 import CompanyProvider from "@/resources/CompanyProvider";
-//import ModalConfirm from '@/components/ModalConfirm'
+import ModalConfirm from '@/components/ModalConfirm'
 import { mapActions } from 'vuex'
 const companyService = new CompanyProvider();
-//const userService = new UserProvider()
 export default {
- // components: { ModalConfirm },
+ components: { ModalConfirm },
   data: () => ({
     loading: false,
     company: {},
-    //modalConfirm: false,
+    modalConfirm: false,
     tableLoading: false,
     perPage: 15,
     total: 15,
@@ -100,7 +99,19 @@ export default {
     ...mapActions({
       setSnackbar: 'Style/setSnackbar'
     }),
-    async confirmRemove (id) {
+     async getCompany () {
+      try {
+        const { data } = await companyService.getCompanyById(this.companyId)
+        this.company = data
+      } catch (err) {
+        this.setSnackbar({
+          message: err.message,
+          type: 'pink',
+          active: true
+        })
+      }
+    },
+     async confirmRemove (id) {
       this.loading = true
       // this.modalConfirm = true
       try {
@@ -122,24 +133,11 @@ export default {
         })
       }
     },
-    async getCompany () {
-      try {
-        const { data } = await companyService.getCompanyById(this.companyId)
-        this.company = data
-        console.log("getCompany",this.company)
-      } catch (err) {
-        this.setSnackbar({
-          message: err.message,
-          type: 'pink',
-          active: true
-        })
-      }
-    },
-
     changePage (page) {
       this.page = page
-      this.getData()
     },
+
+    
 
   }
 }

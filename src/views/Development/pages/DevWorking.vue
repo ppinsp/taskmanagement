@@ -91,12 +91,11 @@
                             <v-card-text>
                               <v-layout row>
                                 <v-flex>
-                                  <v-card max-width="80%">
+                                  <v-card max-width="50%">
                                     <v-container fluid grid-list-lg>
                                       <v-layout row wrap>
                                         <v-flex xs12>
                                           <!-- create panel  -->
-
                                           <!-- Master card of Requirement -->
                                           <v-card
                                             v-for="(requirement,

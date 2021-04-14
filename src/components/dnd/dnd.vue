@@ -61,12 +61,13 @@
                         </v-btn>
                       </v-col>
                       <v-col>
+                        <!-- ส่งrequirement id  -->
                         <v-btn
                           color="error"
                           fab
                           small
                           dark
-                          @click="$emit('stop', timer)"
+                          @click="$emit('stop', timer )"
                         >
                           <v-icon>mdi-motion-pause</v-icon>
                         </v-btn>

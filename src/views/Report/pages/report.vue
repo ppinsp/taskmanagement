@@ -14,12 +14,12 @@
             transition="dialog-bottom-transition"
           >
             <template v-slot:activator="{ on, attrs }">
-              <v-card v-bind="attrs" v-on="on" class="ma-6">
+              <v-card v-bind="attrs" v-on="on" class="ma-8" max-width="200" min-width="200">
                 <v-card-actions> </v-card-actions>
                 <!----------------------- cade of Project name ------------------------->
                 <v-card-title
                   class="pb-0 mb-3 justify-center "
-                  style="font-family:'Google Sans',Roboto,sans-serif; line-height:1.1;"
+                  style="font-family:'Google Sans',Roboto,sans-serif; line-height:1.1; "
                 >
                   {{ element.name }}
                 </v-card-title>
@@ -85,12 +85,13 @@ export default {
         sortable: false,
         value: "reqName",
       },
-      { text: "Time", value: "report" },
+      { text: "Time", value: "sum" },
     ],
   }),
   mounted() {
     this.showReport();
     this.showReportReq();
+    //this.formatTime(times);
   },
   methods: {
     async showReport() {
@@ -105,18 +106,61 @@ export default {
     async showReportReq() {
       const { data }  = await ReportService.getReportReq(1); /// ส่ง project Id ที่คลิก 
       //console.log('data', data)
-      this.arrReqT = data.map((r) => {
+
+      
+this.arrReqT = data.map((r) => {
         const report = r.report.length > 0 ? r.report.reduce((total, acc) => total + this.timeCompute(acc.time), 0) : 0
         const reqName = r.detail
-        //console.log('req',reqName)
-        return { ...r, report, reqName}
+        //const sumtime = sumtime + report 
+        this.formatTime({report});
+        //console.log('req',sumtime)
+      return { ...r, report, reqName}
       });
+
+      
+      
+      
       //console.log('arrReq', this.arrReqT)
     },
     timeCompute(times) {
       const mapped = times.split(':')
       return (+mapped[0] * 360) + (+mapped[1] * 60) + (+mapped[2])
-    }
+    },
+    
+    //////////////////////////////////////////////
+    formatTime(times) {
+      //console.log('time',times['report'])
+      let hours = "00";
+      let minutes = "00";
+      let seconds = "00";
+      let sum;
+
+      if(times){
+
+      hours = Math.floor(Number(times['report']) / 3600);
+      //hours = hours.slice(-2);
+      //console.log('hou',hours)
+      times['report'] = times['report'] - Number(hours * 3600);
+      minutes = Math.floor(Number(times['report']) / 60);
+      //minutes = minutes.slice(-2);
+      times['report'] = times['report'] - Number(minutes * 60);
+      seconds = times['report'];
+      //seconds = seconds.slice(-2);
+      sum = `${hours}:${minutes}:${seconds}`;
+      console.log('h',sum)
+      
+      }
+      return  (sum) ;
+    },
+
+    
+    
+
   },
 };
 </script>
+<style >
+  ma-8{
+    min-width: 250px;
+  }
+</style>

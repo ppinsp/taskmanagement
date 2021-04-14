@@ -8,15 +8,19 @@ export default {
       component: () => import('@/views/Company/pages/CompanyList.vue')
     },
     {
-      path: 'createcompany',
+      path: 'create',
       name: 'CreateCompany',
       component: () => import('@/views/Company/pages/createCompany.vue')
     },
     {
-      path: 'companydetail',
+      path: 'detail',
       name: 'CompanyDetail',
       component: () => import('@/views/Company/pages/CompanyDetail.vue')
     },
-    
+    {
+      path: ':id/update',
+      name: 'UpdateCompany',
+      component: () => import('@/views/Company/pages/createCompany.vue'),
+    },
   ]
 }

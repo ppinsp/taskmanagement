@@ -67,6 +67,7 @@
             outlined></v-select>
         </v-col>
       </v-row>
+      
       <v-row>
         <v-col cols="12" md="6" class="box">
           <h2> Requirement </h2>

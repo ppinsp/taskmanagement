@@ -26,6 +26,10 @@ export default class CompanyProvider extends HttpRequest {
     //     this.setHeader(getAuthToken())
     //     return this.put(`/statustask/${id}`, payload)
     // }
+    updateCompany(id, payload) {
+      this.setHeader(getAuthToken())
+      return this.put(`/company/${id}`, payload)
+    }
 
     deleteCompanyById(id) {
         this.setHeader(getAuthToken())
