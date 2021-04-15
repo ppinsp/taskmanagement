@@ -260,8 +260,6 @@ export default {
       data.map((I) => {
         this.arrInProgress.push({ name: I.detail, id: I.id });
       });
-      
-
     },
 
     async showDone() {
