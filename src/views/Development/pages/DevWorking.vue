@@ -457,7 +457,7 @@ export default {
       return [
         {
           text: "Shere THING",
-          align: "start",
+          align: "center",
           sortable: false,
           value: "massages",
         },
@@ -670,7 +670,7 @@ export default {
     },
 
     start: function(req_Id) {
-      console.log('r',req_Id)
+      console.log('rname',req_Id)
       requirementService.updateRequirement(
         req_Id, 
         {

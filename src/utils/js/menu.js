@@ -19,6 +19,12 @@ export default {
       roles: ["admin", "sa"],
     },
     {
+      title: "Company",
+      to: "/company",
+      icon: "mdi-home-city",
+      roles: ["admin", "sa"],
+    },
+    {
       title: "Project",
       to: "/project",
       icon: "mdi-layers-triple",
@@ -31,22 +37,16 @@ export default {
       roles: ["admin", "dev"],
     },
     {
-      title: "Company",
-      to: "/company",
-      icon: "mdi-home-city",
-      roles: ["admin", "sa"],
+      title: "UAT Task",
+      to: "/review",
+      icon: "mdi-message-draw",
+      roles: ["admin", "dev" , "sa"],
     },
     {
       title: "Report Time",
       to: "/report",
       icon: "mdi-chart-areaspline",
       roles: ["admin", "dev"],
-    },
-    {
-      title: "UAT Task",
-      to: "/review",
-      icon: "mdi-message-draw",
-      roles: ["admin", "dev" , "sa"],
     },
   ],
 };

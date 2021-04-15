@@ -31,13 +31,14 @@
               <div
                 class="list-group-item"
                 v-for="element in arrInProgress"
-                :key="element.name"
+                :key="element.index"
               >
                 <v-card>
                   <v-card-text class="mt-1">
                     {{ element.name }}
                   </v-card-text>
                   <v-divider></v-divider>
+
 
                   <v-card-actions>
                     <v-row>
@@ -49,13 +50,14 @@
                       </v-col>
                     </v-row>
                     <v-row>
-                      <v-col class="ml-3">
+                      <v-col>
+                        
                         <v-btn
                           color="success"
                           fab
                           small
                           dark
-                          @click="$emit('start', element.id)"
+                          @click="$emit('start',(element.id))"
                         >
                           <v-icon>mdi-motion-play</v-icon>
                         </v-btn>
@@ -67,7 +69,7 @@
                           fab
                           small
                           dark
-                          @click="$emit('stop', timer, element.id )"
+                          @click="$emit('stop', timer, (element.id) )"
                         >
                           <v-icon>mdi-motion-pause</v-icon>
                         </v-btn>
@@ -76,7 +78,7 @@
                   </v-card-actions>
 
 
-                  
+
                 </v-card>
               </div>
 
@@ -204,6 +206,7 @@ export default {
     arrInProgress: [],
     arrDone: [],
     arrUnitAutomationTest: [],
+    // arrTempData: [],
     ////////////////
     dialog: false,
     user: '',
@@ -222,16 +225,34 @@ export default {
     // await this.getData();
   },
   methods: {
-    async showRequirement(user) {
-      console.log('user',user)
-      const { data } = await requirementService.getRequirementByUserId(user); //ส่งค่าของ user_ID
+    async showRequirement() {
+      //console.log('user',user)
+      const { data } = await requirementService.getRequirementByUserId(1); //ส่งค่าของ user_ID
       data.map((n) => {
-        // console.log(n.id);
+        //console.log('task',n);
         if (n.task == null) {
-          this.arrBacklog.push({ name: n.detail });
+          this.arrBacklog.push({ name: n.detail, id: n.id });
         }
+      //   else if (n.task == 1) // InProgress
+      //   {
+      //     this.arrInProgress.push({ name: n.detail, id: n.id });
+      //   } else if (n.task == 2) //Done
+      //   {
+      //     this.arrDone.push({ name: n.detail, id: n.id});
+      //   }else if (n.task == 5) // review
+      //   {
+      //     const review = n.review.map((review) => review.opinion);
+      //   this.arrUnitAutomationTest.push({ name: n.detail, review });
+      //   }
       });
-    },
+      },
+
+    // async tempData() {
+    //   const { data } = await requirementService.getRequirementByUserId(1);//ส่งค่าของ user_ID
+    //   data.map((req) => {
+    //       this.arrTempData.push({ reqId: req.id});
+    //   })
+    // },
 
     async showInPro() {
       const { data } = await requirementService.getReqInprogress(1); //ส่งค่าของ user_ID
@@ -239,6 +260,7 @@ export default {
       data.map((I) => {
         this.arrInProgress.push({ name: I.detail, id: I.id });
       });
+      
 
     },
 
@@ -248,15 +270,15 @@ export default {
         this.arrDone.push({ name: D.detail , id: D.id});
       });
     },
-
     async showResultTest() {
       const { data } = await requirementService.getRepair(1); //ส่งค่าของ user_ID
       data.forEach((R) => {
         const review = R.review.map((review) => review.opinion);
-        this.arrUnitAutomationTest.push({ name: R.detail, review });
+        this.arrUnitAutomationTest.push({ name: R.detail, review , id: R.id});
       });
     },
     async updateReqDone(req_id) {
+      console.log('id_don',req_id)
       await requirementService.updateRequirement(
         req_id,
         {

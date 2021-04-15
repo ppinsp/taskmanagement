@@ -15,14 +15,12 @@
               <div
                 class="list-group-item"
                 v-for="element in arrWaiting"
-                :key="element.name"
+                :key="element.index"
               >
-                <v-card color="#E0F7FA">
+                <v-card color="#E0F7FA" class="mt-3">
                   <v-card-subtitle>
-                    <div v-for="element in arrWaiting" :key="element.user">
-                      <v-icon class="mr-2">mdi-account-star</v-icon>
-                      {{ element.user }}
-                    </div>
+                    <v-icon class="mr-2">mdi-account-star</v-icon>
+                    {{ element.user }}
                   </v-card-subtitle>
                   <v-divider></v-divider>
                   <v-card-text class="mt-1">
@@ -40,11 +38,15 @@
         <v-card width="100%">
           <v-card-title>Testing</v-card-title>
           <v-card-text class="text--primary">
-            <draggable class="v-list-group fig-height" :list="arrUAT" group="tasks">
+            <draggable
+              class="v-list-group fig-height"
+              :list="arrUAT"
+              group="tasks"
+            >
               <div
                 class="list-group-item"
                 v-for="element in arrUAT"
-                :key="element.name"
+                :key="element.index"
               >
                 <v-card color="#E0F7FA">
                   <v-card-text class="mt-1">
@@ -76,8 +78,7 @@
                               </v-btn>
                             </template>
                             <v-card>
-                              <v-card-title class="headline grey lighten-2"
-                              >
+                              <v-card-title class="headline grey lighten-2">
                                 Ready to Pre Production
                               </v-card-title>
                               <v-card-text>
@@ -95,12 +96,15 @@
                                   </v-row>
                                 </div>
                               </v-card-text>
+
                               <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn
                                   color="primary"
                                   text
-                                  @click=" updatePrepoduction(element.id),dialog = false"
+                                  @click="
+                                    updatePrepoduction((element.id)), dialog = false
+                                  "
                                 >
                                   Yes, task ready
                                 </v-btn>
@@ -108,7 +112,9 @@
                                 <v-btn
                                   color="error"
                                   text
-                                  @click="updateTesting(element.id),dialog = false"
+                                  @click="
+                                    updateTesting(element.id), (dialog = false)
+                                  "
                                 >
                                   No
                                 </v-btn>
@@ -156,7 +162,10 @@
                                 <v-btn
                                   color="primary"
                                   text
-                                  @click=" updateRepair(element.id),dialogErr = false "
+                                  @click="
+                                    updateRepair(element.id),
+                                      (dialogErr = false)
+                                  "
                                 >
                                   Yes, Send back
                                 </v-btn>
@@ -164,7 +173,10 @@
                                 <v-btn
                                   color="error"
                                   text
-                                  @click="updateTesting(element.id),dialogErr = false"
+                                  @click="
+                                    updateTesting(element.id),
+                                      (dialogErr = false)
+                                  "
                                 >
                                   No
                                 </v-btn>
@@ -192,14 +204,15 @@
                         <v-row>
                           <v-data-table
                             :headers="headers"
-                            :items="desserts"
+                            :items="comments"
                             class="elevation-1"
                           >
-                            <template v-slot:item.comment="{ item }">
-                              <v-chip :color="getColor(item.comment)" dark>
+                            <template v-slot:item.comments="{ items }">
+                              <v-chip :color="getColor(items.comment)" dark>
                                 {{ item.comment }}
                               </v-chip>
                             </template>
+                            
                           </v-data-table>
                         </v-row>
                         <v-row class="mt-5">
@@ -221,6 +234,9 @@
                   </v-expand-transition>
                 </v-card>
               </div>
+
+
+
             </draggable>
           </v-card-text>
         </v-card>
@@ -271,7 +287,7 @@ export default {
     arrpreProduction: [],
     show: false,
     headers: [{ text: "comment", align: "center", value: "comment" }],
-    desserts: [
+    comments: [
       {
         comment: " hi ",
       },
@@ -292,6 +308,7 @@ export default {
         this.arrWaiting.push({
           name: D.detail,
           user: `${D.user.firstName} ${D.user.lastName}`,
+          id: D.id
         });
       });
     },
@@ -299,52 +316,49 @@ export default {
     getColor(comment) {
       if (comment > 400) return "red";
       else if (comment > 200) return "orange";
-      else return "green";
+      else 
+      return "green";
     },
 
     async updatePrepoduction(reqment_Id) {
-      console.log('req',reqment_Id)
-      await requirementService.updateRequirement(
-        reqment_Id,{//ส่งRequirement id นั้นๆไป
-          task: 4
-        }
-      )
+      console.log("reqProduction", reqment_Id);
+      await requirementService.updateRequirement(reqment_Id, {
+        //ส่งRequirement id นั้นๆไป
+        task: 4,
+      });
     },
     async updateTesting(reqment_Id) {
-      await requirementService.updateRequirement(
-        reqment_Id,{//ส่งRequirement id นั้นๆไป
-          task: 3
-        }
-      )
+      await requirementService.updateRequirement(reqment_Id, {
+        //ส่งRequirement id นั้นๆไป
+        task: 3,
+      });
     },
     async updateRepair(reqment_Id) {
-      await requirementService.updateRequirement(
-      reqment_Id,{//ส่งRequirement id นั้นๆไป
-          task: 5
-        }
-      )
+      await requirementService.updateRequirement(reqment_Id, {
+        //ส่งRequirement id นั้นๆไป
+        task: 5,
+      });
     },
 
-    async showPrepo(){
-      const { data } = await requirementService.getPrepo(1)//user_id
+    async showPrepo() {
+      const { data } = await requirementService.getPrepo(1); //user_id
       data.map((P) => {
-        this.arrpreProduction.push({name: P.detail, id: P.id});
-      })
+        this.arrpreProduction.push({ name: P.detail, id: P.id });
+      });
     },
 
-    async showTesting(){
-      const { data } = await requirementService.getTesting(1);//user_id
+    async showTesting() {
+      const { data } = await requirementService.getTesting(1); //user_id
+      console.log('this',data)
       data.map((T) => {
-        this.arrUAT.push({name: T.detail, id: T.id})
-      })
-    }
-
+        this.arrUAT.push({ name: T.detail, id: T.id });
+      });
+    },
   },
 };
 </script>
 <style>
-.fig-height{
+.fig-height {
   min-height: 360px;
 }
 </style>
-

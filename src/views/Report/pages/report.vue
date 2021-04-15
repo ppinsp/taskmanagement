@@ -92,7 +92,7 @@ export default {
         sortable: false,
         value: "reqName",
       },
-      { text: "Time", value: "formatTime" },
+      { text: "Time", value: "sum" },
     ],
     // nameProject: '',
     Time: [],
