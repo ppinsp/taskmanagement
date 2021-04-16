@@ -5,13 +5,14 @@
         <div
           class="list-group-item"
           v-for="element in arrReport"
-          :key="element.id"
+          :key="element.index"
         >
           <v-dialog
             v-model="dialog"
             fullscreen
             hide-overlay
             transition="dialog-bottom-transition"
+            persistent :retain-focus="false"
           >
             <template v-slot:activator="{ on, attrs }">
               <v-card
@@ -26,8 +27,7 @@
                 <v-card-title
                   class="pb-0 mb-3 justify-center "
                   style="font-family:'Google Sans',Roboto,sans-serif; line-height:1.1; "
-                  @click="showReportReq(element.ProjectId)"
-                >
+                  @click="showReportReq(element.projectId)" >
                   {{ element.projectName }}
                 </v-card-title>
                 <!-- <v-divider></v-divider> -->
@@ -92,11 +92,12 @@ export default {
         sortable: false,
         value: "reqName",
       },
-      { text: "Time", value: "sum" },
-    ],
+      { text: "Time", align: "start" ,value: "getTime" },
+    ],   
     // nameProject: '',
     Time: [],
   }),
+  
   mounted() {
     this.showReport();
     this.showReportReq();
@@ -112,7 +113,7 @@ export default {
       data.map((project) => {
         this.arrReport.push({
           projectName: project.name,
-          ProjectId: project.id,
+          projectId: project.id,
         });
       });
 
@@ -121,7 +122,7 @@ export default {
     },
 
     async showReportReq(ProjectId) {
-      console.log("Project", ProjectId);
+      console.log('project',ProjectId);
       const { data } = await ReportService.getReportReq(ProjectId);
       //console.log('data', data)
       this.arrReqT = data.map((r) => {
@@ -134,7 +135,10 @@ export default {
             : 0;
         const reqName = r.detail;
         this.formatTime({ report });
-        return { ...r, report, reqName };
+        
+        var timeCal = this.formatTime({ report }); 
+        var getTime = timeCal.totalSum;
+        return { ...r, report, reqName , getTime};
       });
     },
     timeCompute(times) {
@@ -144,11 +148,11 @@ export default {
 
     //////////////////////////////////////////////
     formatTime(times) {
-      //console.log('time',times['report'])
       let hours = "00";
       let minutes = "00";
       let seconds = "00";
       let sum;
+      var totalSum;
       if (times) {
         hours = Math.floor(Number(times["report"]) / 3600);
         times["report"] = times["report"] - Number(hours * 3600);
@@ -157,10 +161,9 @@ export default {
         seconds = times["report"];
         sum = `${hours} Hours ${minutes} minutes ${seconds} seconds`;
         
-        //console.log("hffsfsdfsdf", sum);
+        totalSum = sum.toString();
       }
-      return sum;
-      
+      return {totalSum}; 
     },
   },
 };
