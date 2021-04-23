@@ -51,12 +51,12 @@
             <v-date-picker
               v-model="formData.deadlineDate"
               @input="activeDate = false"
-            ></v-date-picker>
+            />
           </v-menu>
         </v-col>
       </v-row>
       <v-row>
-        <v-col cols="12" md="6">
+        <v-col cols="12" >
           <v-select
             v-model="formData.team"
             :rules="validation.team"
@@ -64,10 +64,21 @@
             item-text="name"
             item-value="id"
             label="Team"
-            outlined></v-select>
+            outlined />
+        </v-col>
+        <v-col cols="12" >
+          <v-select
+            outlined
+            label="Company"
+            :items="companys"
+            v-model="formData.company"
+            :rules="validation.team"
+            item-text="name"
+            item-value="id"
+            return-object
+          />
         </v-col>
       </v-row>
-      
       <v-row>
         <v-col cols="12" md="6" class="box">
           <h2> Requirement </h2>
@@ -116,8 +127,7 @@
                   v-model="formData.requirements[index].file"
                   @change="(file) => { uploadFile(file, 'fileUpload', index) }"
                   truncate-length="15"
-                ></v-file-input>
-
+                />
               </v-col>
               <v-col cols="1 mt-2 text-center">
                 <v-icon @click="removeRequirement(index)">mdi-delete-outline</v-icon>
@@ -130,7 +140,7 @@
               @click="addRequirement"
               :loading="loading"
               block>
-              +
+              + requirement
             </v-btn>
           </div>
         </v-col>
@@ -171,12 +181,15 @@
 <script>
 import ProjectProvider from '@/resources/ProjectProvider'
 import UserProvider from '@/resources/UserProvider'
+
+import CompanyProvider from '@/resources/CompanyProvider'
 import ModalConfirm from '@/components/ModalConfirm'
 import { uploadToBucket } from '@/utils/js/S3'
 import { mapActions } from 'vuex'
 import dayjs from 'dayjs'
 const projectService = new ProjectProvider()
 const userService = new UserProvider()
+const companyProvider = new CompanyProvider()
 
 export default {
   components: {
@@ -184,6 +197,7 @@ export default {
   },
   data: () => ({
     teams: [],
+    companys: [],
     activeDate: false,
     valid: false,
     loading: false,
@@ -192,6 +206,7 @@ export default {
       name: '',
       detail: '',
       team: null,
+      company: '',
       requirements: [
         {
           fileUpload: null,
@@ -221,7 +236,9 @@ export default {
     this.loading = true
     if (this.isUpdating) {
       await this.getProject()
+      await this.getTeams()
     }
+    this.getCompany() 
     await this.getTeams()
     this.loading = false
   },
@@ -245,6 +262,7 @@ export default {
     async getProject () {
       try {
         const { data } = await projectService.getProjectById(this.projectId)
+        console.log('Project Data', data);
         this.formData = {
           name: data.name,
           detail: data.detail,
@@ -361,6 +379,10 @@ export default {
       } finally {
         this.loading = false
       }
+    },
+    async getCompany() {
+      const {data} = await companyProvider.getAllCompany()
+      this.companys = data
     },
     async getTeams () {
       try {
