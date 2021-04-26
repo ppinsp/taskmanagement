@@ -9,8 +9,9 @@
         >
           <v-card
             class="ma-8"
-            max-width="200"
+            width="250"
             min-width="200"
+            hover
             @click="showReportById(element.projectId)"
           >
             <!----------------------- cade of Project name ------------------------->
@@ -23,6 +24,11 @@
             <v-card-text class="text--secondary rtl">
               TimeAll : {{sumTime(element.requirements)}}
             </v-card-text>
+            <v-divider />
+            <v-card-actions>
+              <v-spacer />
+              <v-btn color="error" :disabled="element.status === 'incident'" @click.stop="setIncident(element.projectId)">incident</v-btn>
+            </v-card-actions>
           </v-card>
         </div>
         <!----------------------- end ------------------------->
@@ -60,21 +66,31 @@
         <v-divider />
       </v-card>
     </v-dialog>
+    <modal-confirm
+    :active="confirm"
+    :confirm-text="`Login`"
+    :title="'Reset Password'"
+    :message="`Please open your email for reset password`"
+    :show-cancel="false"
+    @onConfirm="() => { $router.push({ name: 'Login' })}" />
   </div>
 </template>
 
 <script>
 import ReportProvider from "../../../resources/ReportProvider";
+// import ProjectProvider from "../../../resources/ProjectProvider"
+import ModalConfirm from '@/components/ModalConfirm'
 
 const ReportService = new ReportProvider();
-
+// const ProjectService = new ProjectProvider();
 export default {
+  components: {
+    ModalConfirm
+  },
   data: () => ({
+    confirm : false,
     arrReport: [],
     dialog: false,
-    notifications: false,
-    sound: true,
-    widgets: false,
     arrReqT: [],
     headers: [
       {
@@ -98,7 +114,8 @@ export default {
           projectName: project.name,
           projectId: project.id,
           arrData: project,
-          requirements: project.requirements
+          requirements: project.requirements,
+          status: project.status
         });
       });
     },
@@ -135,6 +152,15 @@ export default {
         }
       })
     },
+    async setIncident (projectId) {
+      this.modalConfirm =true
+      const payload = {
+        status: 'incident'
+      }
+      console.log('payload',payload,projectId);
+      // const { data } = await ProjectService.updateProjectStatus(projectId, payload);
+      // console.log(data);
+    },
     timeReqT(reports) {
       const reportsTime = reports.map((report) => {
         return {
@@ -163,7 +189,7 @@ export default {
 };
 </script>
 <style>
-.ma-8 {
-  min-width: 250px;
-}
+  .ma-8 {
+    min-width: 250px;
+  }
 </style>

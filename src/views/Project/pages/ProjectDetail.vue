@@ -13,7 +13,7 @@
             <td class="pa-2"> Team </td> <td class="pl-6">{{ project.team ? project.team.name : '' }} </td>
           </tr>
           <tr>
-            <td class="pa-2"> Company  </td> <td class="pl-6">  </td>
+            <td class="pa-2"> Company  </td> <td class="pl-6"> {{ project.company? project.company.name : '' }} </td>
           </tr>
           <tr>
             <td class="pa-2"> Detail  </td> <td class="pl-6"> {{ project.detail }} </td>
@@ -33,7 +33,7 @@
     <v-row v-for="requirement in project.requirements" :key="requirement.id">
       <v-col class="box">
         <v-row class="col-12">
-          <span style="font-weight: bold;"> Requriement List</span> {{ requirement.detail }}
+          <span style="font-weight: bold;"> Requriement List </span> <span>{{ ': '+ requirement.detail }}</span>  
         </v-row>
         <v-row class="col-12">
           <img :src="requirement.imageUpload" width="300" alt="">

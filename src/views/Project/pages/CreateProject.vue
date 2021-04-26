@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-form ref="form" v-model="valid" :lazy-validation="false">
+    <v-form ref="form" :lazy-validation="false">
       <v-row>
         <v-col cols="12">
           <h1 v-if="isUpdating">Update Project</h1>
@@ -75,7 +75,6 @@
             :rules="validation.team"
             item-text="name"
             item-value="id"
-            return-object
           />
         </v-col>
       </v-row>
@@ -111,7 +110,7 @@
                   v-model="formData.requirements[index].image"
                   @change="(file) => { uploadFile(file, 'imageUpload', index) }"
                   truncate-length="15"
-                ></v-file-input>
+                />
                 <div class="d-flex ma-4 justify-center align-center flex-column" v-if="formData.requirements[index].fileUpload !== null">
                   {{ formData.requirements[index].fileUpload }}
                   <v-btn
@@ -199,7 +198,6 @@ export default {
     teams: [],
     companys: [],
     activeDate: false,
-    valid: false,
     loading: false,
     modalConfirm: false,
     formData: {
@@ -262,12 +260,12 @@ export default {
     async getProject () {
       try {
         const { data } = await projectService.getProjectById(this.projectId)
-        console.log('Project Data', data);
         this.formData = {
           name: data.name,
           detail: data.detail,
           deadlineDate: dayjs(data.deadlineDate).format('YYYY-MM-DD'),
           team: data.team.id,
+          company: data.company.id,
           requirements: data.requirements.map(r => ({
             id: r.id,
             fileUpload: r.fileUpload,
@@ -298,11 +296,19 @@ export default {
       this.modalConfirm = true
     },
     async createProject () {
-      this.$refs.form.validate()
-      if (this.valid) {
+      const valid = this.$refs.form.validate()
+      if (valid) {
+        const payload = {
+          name: this.formData.name,
+          requirements: this.formData.requirements,
+          detail: this.formData.detail,
+          deadlineDate: this.formData.deadlineDate,
+          company: this.formData.company,
+          team: this.formData.team
+        }
         try {
           this.loading = true
-          const { data } = await projectService.createProject(this.formData)
+          const { data } = await projectService.createProject(payload)
           if (data) {
             this.setSnackbar({
               message: 'Create project success.',
@@ -334,17 +340,26 @@ export default {
       this.loading = false
     },
     async updateProject () {
-      this.$refs.form.validate()
-      if (this.valid) {
+      const valid = this.$refs.form.validate()
+      if (valid) {
         try {
+          const payload = {
+            company: this.formData.company,
+            deadlineDate: this.formData.deadlineDate,
+            detail: this.formData.detail,
+            name: this.formData.name,
+            requirements:this.formData.requirements,
+            team: this.formData.team
+          }
           this.loading = true
-          const { data } = await projectService.updateProject(this.projectId, this.formData)
+          const { data } = await projectService.updateProject(this.projectId, payload)
           if (data) {
             this.setSnackbar({
               message: 'Update project success.',
               type: 'success',
               active: true
             })
+            this.$refs.form.resetValidation()
             this.$router.push({ name: 'ProjectList'})
           }
         } catch (err) {

@@ -103,7 +103,6 @@ export default {
       return this.$route.params.id ? true : false
     },
     companyId () {
-      console.log('id', this.$route.params.id);
       return this.$route.params.id ? this.$route.params.id : 0
     }
   },
@@ -122,7 +121,6 @@ export default {
     async getCompany () {
       try {
         const { data } = await companyService.getCompanyById(this.companyId)
-        console.log('data', data)
         this.formData = {
           name: data.name,
           address: data.address,
@@ -191,7 +189,6 @@ export default {
         }
       }
     },
-   
   }
 }
 </script>
