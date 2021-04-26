@@ -206,8 +206,6 @@ export default {
     arrInProgress: [],
     arrDone: [],
     arrUnitAutomationTest: [],
-    // arrTempData: [],
-    ////////////////
     dialog: false,
     user: '',
   }),
@@ -222,14 +220,11 @@ export default {
     this.showResultTest();
     this.showRequirement();
     this.user = getUser();
-    // await this.getData();
   },
   methods: {
     async showRequirement() {
-      //console.log('user',user)
-      const { data } = await requirementService.getRequirementByUserId(1); //ส่งค่าของ user_ID
+      const { data } = await requirementService.getRequirementByUserId(this.user.sub); //ส่งค่าของ user_ID
       data.map((n) => {
-        //console.log('task',n);
         if (n.task == null) {
           this.arrBacklog.push({ name: n.detail, id: n.id });
         }
@@ -245,38 +240,28 @@ export default {
       //   this.arrUnitAutomationTest.push({ name: n.detail, review });
       //   }
       });
-      },
-
-    // async tempData() {
-    //   const { data } = await requirementService.getRequirementByUserId(1);//ส่งค่าของ user_ID
-    //   data.map((req) => {
-    //       this.arrTempData.push({ reqId: req.id});
-    //   })
-    // },
-
+    },
     async showInPro() {
-      const { data } = await requirementService.getReqInprogress(1); //ส่งค่าของ user_ID
-      console.log('data',data)
+      const { data } = await requirementService.getReqInprogress(this.user.sub); //ส่งค่าของ user_ID
       data.map((I) => {
         this.arrInProgress.push({ name: I.detail, id: I.id });
       });
     },
 
     async showDone() {
-      const { data } = await requirementService.getReqDone(1); //ส่งค่าของ user_ID
+      const { data } = await requirementService.getReqDone(this.user.sub); //ส่งค่าของ user_ID
       data.map((D) => {
         this.arrDone.push({ name: D.detail , id: D.id});
       });
     },
     async showResultTest() {
-      const { data } = await requirementService.getRepair(1); //ส่งค่าของ user_ID
+      const { data } = await requirementService.getRepair(this.user.sub); //ส่งค่าของ user_ID
       data.forEach((R) => {
         const review = R.review.map((review) => review.opinion);
         this.arrUnitAutomationTest.push({ name: R.detail, review , id: R.id});
       });
     },
     async updateReqDone(req_id) {
-      console.log('id_don',req_id)
       await requirementService.updateRequirement(
         req_id,
         {

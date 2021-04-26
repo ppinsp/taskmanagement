@@ -47,7 +47,7 @@
       :message="`Confirm delete company ${company.name}.`"
       :show-cancel="true"
       @onCancel="() => { modalConfirm = false }"
-     />
+    />
   </v-container>
 </template>
 
@@ -92,14 +92,13 @@ export default {
   async mounted () {
     this.loading = true
     await this.getCompany()
- 
     this.loading = false
   },
   methods: {
     ...mapActions({
       setSnackbar: 'Style/setSnackbar'
     }),
-     async getCompany () {
+    async getCompany () {
       try {
         const { data } = await companyService.getCompanyById(this.companyId)
         this.company = data
@@ -111,7 +110,7 @@ export default {
         })
       }
     },
-     async confirmRemove (id) {
+    async confirmRemove (id) {
       this.loading = true
       // this.modalConfirm = true
       try {
