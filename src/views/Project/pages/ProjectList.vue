@@ -67,6 +67,7 @@ export default {
       { text: 'Id', align: 'start', sortable: false, value: 'id' },
       { text: 'Name', value: 'name' },
       { text: 'Team', value: 'teamName' },
+      { text: 'company', value: 'company' },
       { text: 'Detail', value: 'detail' },
       { text: 'option', value: 'option', width: 40, align: 'center' }
     ]
@@ -77,7 +78,8 @@ export default {
         id: d.id,
         name: d.name,
         detail: d.detail,
-        teamName: d.team ? d.team.name : ''
+        teamName: d.team ? d.team.name : '',
+        company: d.company? d.company.name: ''
       }))
     }
   },

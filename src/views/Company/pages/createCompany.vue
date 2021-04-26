@@ -20,12 +20,10 @@
       </v-row>
       <v-row>
           <v-col cols="12" md="6" offset-md="3">
-            <v-text-field 
-            height="150px" 
+            <v-textarea
             v-model="formData.address" 
             label="Address" 
-            outlined dense>
-            </v-text-field>
+            outlined dense />
           </v-col>
       </v-row>
       <v-row>
@@ -44,7 +42,7 @@
             outlined dense></v-text-field>
           </v-col>
       </v-row>
-       <v-row v-if="!isUpdating">
+      <v-row v-if="!isUpdating">
           <v-col cols="12" md="6" offset-md="3">
             <div class="text-center">
               <v-btn style="margin-right: 50px ;" 
@@ -80,7 +78,7 @@ import ModalConfirm from '@/components/ModalConfirm'
 import { mapActions } from 'vuex'
 const companyService = new CompanyProvider();
 export default {
-   components: {
+  components: {
     ModalConfirm
   },
   data:()  => ({
@@ -174,15 +172,17 @@ export default {
             this.setSnackbar({
               message: 'Update company success.',
               type: 'success',
-              active: true
+              active: true,
+              timeOut: '6000'
             })
             this.$router.push({ name: 'Company List'})
           }
         } catch (err) {
           this.setSnackbar({
             message: err.message,
-            type: 'pink',
-            active: true
+            type: 'danger',
+            active: true,
+            timeOut: '16000'
           })
         } finally {
           this.loading = false
@@ -194,11 +194,9 @@ export default {
 </script>
 
 <style >
- .v-text-field{
+.v-text-field{
     min-height: auto !important;
     display: flex !important;
-   
-
   }
 </style>
 

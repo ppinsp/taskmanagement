@@ -223,10 +223,8 @@ export default {
   },
   methods: {
     async showRequirement() {
-      //console.log('user',user)
       const { data } = await requirementService.getRequirementByUserId(this.user.sub); //ส่งค่าของ user_ID
       data.map((n) => {
-        //console.log('task',n);
         if (n.task == null) {
           this.arrBacklog.push({ name: n.detail, id: n.id });
         }
@@ -242,15 +240,7 @@ export default {
       //   this.arrUnitAutomationTest.push({ name: n.detail, review });
       //   }
       });
-      },
-
-    // async tempData() {
-    //   const { data } = await requirementService.getRequirementByUserId(1);//ส่งค่าของ user_ID
-    //   data.map((req) => {
-    //       this.arrTempData.push({ reqId: req.id});
-    //   })
-    // },
-
+    },
     async showInPro() {
       const { data } = await requirementService.getReqInprogress(this.user.sub); //ส่งค่าของ user_ID
       data.map((I) => {
@@ -272,7 +262,6 @@ export default {
       });
     },
     async updateReqDone(req_id) {
-      console.log('id_don',req_id)
       await requirementService.updateRequirement(
         req_id,
         {

@@ -72,7 +72,6 @@
             label="Company"
             :items="companys"
             v-model="formData.company"
-            :rules="validation.team"
             item-text="name"
             item-value="id"
           />
@@ -214,7 +213,7 @@ export default {
           image: null
         }
       ],
-      deadlineDate: null
+      deadlineDate: null,
     },
     validation: {
       name: [(v) => !!v || 'This feild is require.'],
@@ -265,7 +264,7 @@ export default {
           detail: data.detail,
           deadlineDate: dayjs(data.deadlineDate).format('YYYY-MM-DD'),
           team: data.team.id,
-          company: data.company.id,
+          company: data.company? data.company.id: '',
           requirements: data.requirements.map(r => ({
             id: r.id,
             fileUpload: r.fileUpload,
@@ -303,7 +302,7 @@ export default {
           requirements: this.formData.requirements,
           detail: this.formData.detail,
           deadlineDate: this.formData.deadlineDate,
-          company: this.formData.company,
+          company: this.formData.company?this.formData.company:null,
           team: this.formData.team
         }
         try {
@@ -344,7 +343,7 @@ export default {
       if (valid) {
         try {
           const payload = {
-            company: this.formData.company,
+            company: this.formData.company? this.formData.company: null,
             deadlineDate: this.formData.deadlineDate,
             detail: this.formData.detail,
             name: this.formData.name,

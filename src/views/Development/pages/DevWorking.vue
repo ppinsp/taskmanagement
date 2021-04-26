@@ -101,7 +101,6 @@
                   <!-- comment -->
                 </v-card-actions>
                 <!-- End comment -->
-
                 <!-- End select user and Date -->
               </v-card>
             </v-expansion-panel-content>
@@ -272,6 +271,7 @@ export default {
     async addUserToRequirement(requirement_id, user_id) {
       const payload = {user: user_id}
       await requirementService.updateRequirement(requirement_id, payload);
+      this.getAllProjects()
     },
   },
 };

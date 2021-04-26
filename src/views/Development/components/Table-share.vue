@@ -1,5 +1,5 @@
 <template>
-  <v-dialog v-model="dialogShare" width="500">
+  <v-dialog v-model="dialogShare" max-width="500">
     <v-card>
       <v-app-bar color="primary" dark>
         <h2>กระดานสนทนา</h2>
@@ -9,7 +9,7 @@
           <div v-for="message in messages" :key="message.id">
             <div :class="yourMessage(message.userId.username)?'outgoing lower':'incoming'">
               <div class="bubble">
-                <span>{{message.massages}}</span>
+                <span class="name">{{yourMessage(message.userId.username)?'You': message.userId.firstName}} : </span><p>{{message.massages}}</p>
                 <div class="timeStamp">
                   {{ formatTime(message.createdAt)}}
                 </div>
@@ -83,6 +83,7 @@ export default {
     async getMessage() {
       const { data } = await chatService.getChat();
       this.messages = data
+      console.log('this.message',this.messages);
     },
     async sendMessage() {
       const {message} = await chatService.createChat({ massages: this.text });
@@ -116,7 +117,11 @@ export default {
         padding:10px;
         margin-bottom: 10px;
         border-radius: 15px;
-        span {
+        .name {
+          font-size: 13px;
+        }
+        p {
+          width: 180px;
           color: #f9fbff;
           font-size: 16px;
           text-align: left;

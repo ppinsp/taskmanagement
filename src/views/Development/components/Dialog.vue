@@ -8,7 +8,6 @@
         {{name}}
       </v-card-title>
       <v-card>
-      
         <div v-if="dialogMode.imgMode">
           <div v-if="imageUpload">
             <img

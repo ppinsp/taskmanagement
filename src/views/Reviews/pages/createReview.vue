@@ -89,7 +89,7 @@
                               <v-btn
                                 color="primary"
                                 text
-                                @click="updatePrepoduction((element.id)), dialog = false">
+                                @click="updatePrepoduction(element.id), dialog = false">
                                 Yes, task ready
                               </v-btn>
                               <v-btn
@@ -174,10 +174,8 @@
                               <div class="message-blue">
                                 <v-row>
                                   <v-col cols="12">
-                                    <v-avatar color="red" size="24">
-                                      <span class="white--text">{{comment.username}}</span>
-                                    </v-avatar>
-                                      : <span class="message-content">{{comment.comment}}</span>
+                                      <span >{{yourComment(comment.username)? 'You': comment.username.firstName}}</span>
+                                      : <p class="message-content">{{comment.comment}}</p>
                                   </v-col>
                                 </v-row>
                                 <div class="message-timestamp-left">{{comment.createdAt}}</div>
@@ -271,6 +269,7 @@ export default {
   },
   methods: {
     async showDone() {
+      this.arrWaiting = []
       const { data } = await requirementService.getReqDone(this.user.sub); //ส่งค่าของ user_ID
       data.map((D) => {
         this.arrWaiting.push({
@@ -293,6 +292,14 @@ export default {
       })
       this.comments = rawComment  
     },
+    yourComment(user) {
+      if (this.user.sub === user.id ) {
+        return true
+      }
+      else {
+        return false
+      }
+    },
     async sendComment(reqId) {
       const payload = {
         comment: this.message,
@@ -308,6 +315,9 @@ export default {
         //ส่งRequirement id นั้นๆไป
         task: 4,
       });
+      this.showDone();
+      this.showPrepo();
+      this.showTesting();
     },
     async updateTesting(reqment_Id) {
       this.dialog = false
@@ -316,6 +326,9 @@ export default {
         //ส่งRequirement id นั้นๆไป
         task: 3,
       });
+      this.showDone();
+      this.showPrepo();
+      this.showTesting();
     },
     async updateRepair(reqment_Id) {
       this.dialogErr = false
@@ -323,14 +336,19 @@ export default {
         //ส่งRequirement id นั้นๆไป
         task: 5,
       });
+      this.showDone();
+      this.showPrepo();
+      this.showTesting();
     },
     async showPrepo() {
+      this.arrpreProduction = []
       const { data } = await requirementService.getPrepo(this.user.sub); //user_id
       data.map((P) => {
         this.arrpreProduction.push({ name: P.detail, id: P.id });
       });
     },
     async showTesting() {
+      this.arrUAT =[]
       const { data } = await requirementService.getTesting(this.user.sub); //user_id
       data.map((T) => {
         this.arrUAT.push({ name: T.detail, id: T.id });
@@ -363,7 +381,7 @@ export default {
     border-radius: 10px;
     .message-content {
       padding: 0;
-      margin: 0;
+      margin: 5px 0;
     }
     .message-timestamp-left {
       position: absolute;

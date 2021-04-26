@@ -78,11 +78,12 @@
 
 <script>
 import ReportProvider from "../../../resources/ReportProvider";
-// import ProjectProvider from "../../../resources/ProjectProvider"
+import ProjectProvider from "../../../resources/ProjectProvider"
 import ModalConfirm from '@/components/ModalConfirm'
+import { mapActions } from 'vuex'
 
 const ReportService = new ReportProvider();
-// const ProjectService = new ProjectProvider();
+const ProjectService = new ProjectProvider();
 export default {
   components: {
     ModalConfirm
@@ -108,6 +109,7 @@ export default {
   },
   methods: {
     async showReport() {
+      this.arrReport = []
       const { data } = await ReportService.getReport();
       data.map((project) => {
         this.arrReport.push({
@@ -119,6 +121,9 @@ export default {
         });
       });
     },
+    ...mapActions({
+      setSnackbar: 'Style/setSnackbar'
+    }),
     sumTime(required) {
     let hour = 0
     let minute = 0
@@ -157,9 +162,15 @@ export default {
       const payload = {
         status: 'incident'
       }
-      console.log('payload',payload,projectId);
-      // const { data } = await ProjectService.updateProjectStatus(projectId, payload);
-      // console.log(data);
+      const { data } = await ProjectService.updateProjectStatus(projectId, payload);
+      if (data) {
+        this.showReport()
+        this.setSnackbar({
+          message: 'Update Status Project Success',
+          type: 'success',
+          active: true
+        })
+      }
     },
     timeReqT(reports) {
       const reportsTime = reports.map((report) => {
