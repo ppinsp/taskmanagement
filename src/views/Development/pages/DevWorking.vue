@@ -36,7 +36,6 @@
                 >
                 </v-data-table>
               </v-card-text>
-
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <div justify-center mr-5>

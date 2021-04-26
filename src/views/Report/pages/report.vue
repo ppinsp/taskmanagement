@@ -1,75 +1,65 @@
 <template>
   <div class="container mt-5">
     <v-container class="grey lighten-5">
-      <v-row class="mb-1" no-gutters>
+      <v-row class="mb-1" no-gutters v-if="arrReport">
         <div
           class="list-group-item"
           v-for="element in arrReport"
           :key="element.index"
         >
-          <v-dialog
-            v-model="dialog"
-            fullscreen
-            hide-overlay
-            transition="dialog-bottom-transition"
-            persistent :retain-focus="false"
+          <v-card
+            class="ma-8"
+            max-width="200"
+            min-width="200"
+            @click="showReportById(element.projectId)"
           >
-            <template v-slot:activator="{ on, attrs }">
-              <v-card
-                v-bind="attrs"
-                v-on="on"
-                class="ma-8"
-                max-width="200"
-                min-width="200"
-              >
-                <v-card-actions> </v-card-actions>
-                <!----------------------- cade of Project name ------------------------->
-                <v-card-title
-                  class="pb-0 mb-3 justify-center "
-                  style="font-family:'Google Sans',Roboto,sans-serif; line-height:1.1; "
-                  @click="showReportReq(element.projectId)" >
-                  {{ element.projectName }}
-                </v-card-title>
-                <!-- <v-divider></v-divider> -->
-                <v-card-text class="text--secondary rtl">
-                  <!-- <v-icon>mdi-clock-start</v-icon> -->
-                  TimeAll
-                </v-card-text>
-
-                <!----------------------- end ------------------------->
-              </v-card>
-            </template>
-
-            <v-card>
-              <v-toolbar dark color="primary">
-                <v-toolbar-title>
-                  <div justify-center>
-                    <!-- Detail of {{ nameProject }} -->
-                  </div>
-                </v-toolbar-title>
-                <v-spacer></v-spacer>
-                <v-toolbar-items>
-                  <v-btn dark text @click="dialog = false">
-                    <v-icon>mdi-close</v-icon>
-                  </v-btn>
-                </v-toolbar-items>
-              </v-toolbar>
-              <v-list three-line subheader>
-                <v-data-table
-                  hide-default-footer
-                  dense
-                  :headers="headers"
-                  :items="arrReqT"
-                  item-key="name"
-                  class="elevation-1 ma-6"
-                ></v-data-table>
-              </v-list>
-              <v-divider></v-divider>
-            </v-card>
-          </v-dialog>
+            <!----------------------- cade of Project name ------------------------->
+            <v-card-title
+              class="pb-0 mb-3 justify-center "
+              style="font-family:'Google Sans',Roboto,sans-serif; line-height:1.1; "
+            >
+              {{ element.projectName }}
+            </v-card-title>
+            <v-card-text class="text--secondary rtl">
+              TimeAll : {{sumTime(element.requirements)}}
+            </v-card-text>
+          </v-card>
         </div>
+        <!----------------------- end ------------------------->
       </v-row>
     </v-container>
+    <!-- dialog  -->
+    <v-dialog
+      v-model="dialog"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <v-card>
+        <v-toolbar dark color="primary">
+          <v-toolbar-title>
+            <div justify-center>
+              Detail of {{ arrReqT.projectName }}
+            </div>
+          </v-toolbar-title>
+          <v-spacer />
+          <v-toolbar-items>
+            <v-btn dark text @click="closeDialog()">
+              <v-icon>mdi-close</v-icon>
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+          <v-data-table
+            hide-default-footer
+            dense
+            :headers="headers"
+            :items="arrReqT"
+            item-key="id"
+            class="elevation-1 ma-6"
+          />
+        <v-divider />
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -77,6 +67,7 @@
 import ReportProvider from "../../../resources/ReportProvider";
 
 const ReportService = new ReportProvider();
+
 export default {
   data: () => ({
     arrReport: [],
@@ -94,77 +85,80 @@ export default {
       },
       { text: "Time", align: "start" ,value: "getTime" },
     ],   
-    // nameProject: '',
     Time: [],
   }),
-  
-  mounted() {
+  created() {
     this.showReport();
-    this.showReportReq();
-    this.formatTime();
   },
   methods: {
     async showReport() {
       const { data } = await ReportService.getReport();
-      //   data.forEach((p) => {
-      //     const project = p.project.map((project) => project.name);
-      //     this.arrReport.push({ project });
-      //   });
       data.map((project) => {
         this.arrReport.push({
           projectName: project.name,
           projectId: project.id,
+          arrData: project,
+          requirements: project.requirements
         });
       });
-
-      //this.arrReport = data;
-      //console.log('Project',data.id)
     },
-
-    async showReportReq(ProjectId) {
-      console.log('project',ProjectId);
+    sumTime(required) {
+    let hour = 0
+    let minute = 0
+    let second = 0
+      required.map((req) => {
+        const timeRp = req.report.map((reqReport) => {
+          return {
+            time: reqReport.time
+          }
+        })
+        timeRp.forEach(element => {
+          const timeSplit =  element.time.split(':')
+          hour = hour + parseInt(timeSplit[0])
+          minute = minute + parseInt(timeSplit[1])
+          second = second+ parseInt(timeSplit[2])
+        });
+        hour = parseInt( hour + minute/60);
+        minute =parseInt( minute%60);
+        minute =parseInt( minute + second/60);
+        second = parseInt(second%60);
+      })
+      return +hour+':'+minute+':'+second
+    },
+    async showReportById(ProjectId) {
+      this.dialog = true
       const { data } = await ReportService.getReportReq(ProjectId);
-      //console.log('data', data)
-      this.arrReqT = data.map((r) => {
-        const report =
-          r.report.length > 0
-            ? r.report.reduce(
-                (total, acc) => total + this.timeCompute(acc.time),
-                0
-              )
-            : 0;
-        const reqName = r.detail;
-        this.formatTime({ report });
-        
-        var timeCal = this.formatTime({ report }); 
-        var getTime = timeCal.totalSum;
-        return { ...r, report, reqName , getTime};
+      this.arrReqT = data.map((req) => {
+        return {
+          reqName: req.detail,
+          getTime: this.timeReqT(req.report)
+        }
+      })
+    },
+    timeReqT(reports) {
+      const reportsTime = reports.map((report) => {
+        return {
+          time: report.time
+        }
+      })
+      let hour = 0
+      let minute = 0
+      let second = 0
+      reportsTime.forEach(time => {
+        const timeSplit =  time.time.split(':')
+        hour = hour + parseInt(timeSplit[0])
+        minute = minute + parseInt(timeSplit[1])
+        second = second+ parseInt(timeSplit[2])
       });
+      hour = parseInt( hour + minute/60);
+      minute =parseInt( minute%60);
+      minute =parseInt( minute + second/60);
+      second = parseInt(second%60);
+      return +hour+':'+minute+':'+second
     },
-    timeCompute(times) {
-      const mapped = times.split(":");
-      return +mapped[0] * 360 + +mapped[1] * 60 + +mapped[2];
-    },
-
-    //////////////////////////////////////////////
-    formatTime(times) {
-      let hours = "00";
-      let minutes = "00";
-      let seconds = "00";
-      let sum;
-      var totalSum;
-      if (times) {
-        hours = Math.floor(Number(times["report"]) / 3600);
-        times["report"] = times["report"] - Number(hours * 3600);
-        minutes = Math.floor(Number(times["report"]) / 60);
-        times["report"] = times["report"] - Number(minutes * 60);
-        seconds = times["report"];
-        sum = `${hours} Hours ${minutes} minutes ${seconds} seconds`;
-        
-        totalSum = sum.toString();
-      }
-      return {totalSum}; 
-    },
+    closeDialog() {
+      this.dialog = false
+    }, 
   },
 };
 </script>

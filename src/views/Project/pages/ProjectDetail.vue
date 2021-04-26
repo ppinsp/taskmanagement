@@ -13,8 +13,12 @@
             <td class="pa-2"> Team </td> <td class="pl-6">{{ project.team ? project.team.name : '' }} </td>
           </tr>
           <tr>
+            <td class="pa-2"> Company  </td> <td class="pl-6">  </td>
+          </tr>
+          <tr>
             <td class="pa-2"> Detail  </td> <td class="pl-6"> {{ project.detail }} </td>
           </tr>
+          
         </table>
       </v-col>
     </v-row>

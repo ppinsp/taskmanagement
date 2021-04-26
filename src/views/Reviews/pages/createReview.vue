@@ -224,9 +224,9 @@
                           >
                           </v-text-field>
                           <v-btn icon>
-                            <v-icon class="mt-2" color="#1A237E"
-                              >mdi-send</v-icon
-                            >
+                            <v-icon class="mt-2" color="#1A237E">
+                              mdi-send
+                            </v-icon>
                           </v-btn>
                         </v-row>
                       </v-card-text>
@@ -234,14 +234,10 @@
                   </v-expand-transition>
                 </v-card>
               </div>
-
-
-
             </draggable>
           </v-card-text>
         </v-card>
       </div>
-
       <!------------- - card UAT -------------->
       <div class="col-md-3">
         <v-card>

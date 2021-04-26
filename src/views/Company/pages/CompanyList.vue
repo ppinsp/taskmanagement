@@ -83,14 +83,12 @@ export default {
       this.getData()
     },
     async getData () {
-         console.log("get data")
       this.loading = true
       try {
         const query = `page=${this.page}&limit=${this.perPage}&search=${this.searchText}`
         const { data } = await companyService.getAllCompany(query)
         //this.showdata = data
         this.data = data
-        console.log(this.data)
       } catch (err) {
         alert(err)
       } finally {
