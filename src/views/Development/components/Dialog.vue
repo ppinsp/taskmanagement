@@ -12,9 +12,7 @@
           <div v-if="imageUpload">
             <img
             :src="dialogMode.data.imageUpload"
-            width="300"
-            alt=""
-          />
+            width="300" />
           </div>
           <div v-else>
             <div class="imgEmpty">

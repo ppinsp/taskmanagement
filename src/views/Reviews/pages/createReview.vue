@@ -13,7 +13,7 @@
               <div
                 class="list-group-item"
                 v-for="element in arrWaiting"
-                :key="element.index">
+                :key="element.id">
                 <v-card color="#E0F7FA" class="mt-3">
                   <v-card-subtitle>
                     <v-icon class="mr-2">mdi-account-star</v-icon>
@@ -281,7 +281,7 @@ export default {
       });
     },
     async seeComent(reqId) {
-      const {data} = await comentService.getComment(reqId) 
+      const {data} = await comentService.getComment(reqId)
       const rawComment = data.map((comment) => {
         return {
           id: comment.id,

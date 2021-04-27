@@ -9,7 +9,7 @@
         x-large
         class="mt-6"
         @click.stop="openDialogShare()">
-        <v-icon >
+        <v-icon>
           mdi-thought-bubble
         </v-icon>
       </v-btn>
@@ -20,34 +20,35 @@
       <v-window-item :value="1"> 
         <h2 class="text-left">All Project</h2>
         <v-expansion-panels focusable>
-          <v-expansion-panel v-for="(item, i) in projects" :key="i" :disabled="item.status === 'incident'">
+          <v-expansion-panel v-for="item in projects" :key="item.id" >
             <v-expansion-panel-header>
               {{ item.name }}
             </v-expansion-panel-header>
-            <v-expansion-panel-content>
+            <v-expansion-panel-content >
               <v-card
                 v-for="requirement in item.requirements"
                 :key="requirement.id"
                 color="grey lighten-5"
                 class="black--text mt-5">
-                  <v-card-title primary-title>
+                  <v-card-title primary-title >
                     <v-row>
                       <v-col cols="6">
-                        <p style="color: black">
+                        <p :class="requirement.status === 'incedent'?'grey--text':''" style="color: black">
                           {{ requirement.detail }}
                         </p>
                       </v-col>
-                      <v-col cols="6">
+                      <v-col cols="6" :class="requirement.status === 'incedent'?'grey--text':''">
                         {{requirement.user? requirement.user.firstName + requirement.user.lastName: 'Empty' }}
                         <v-chip>
                           {{requirement.task?requirement.task.name: 'Empty'}}
                         </v-chip>
                         <br />
-                        <v-icon @click="openDialogImg(requirement)">
+                        <v-icon @click="openDialogImg(requirement)" :disabled="requirement.status === 'incedent'">
                           mdi-folder-multiple-image
                         </v-icon>
                         <v-icon
                           class="ml-4"
+                          :disabled="requirement.status === 'incedent'"
                           @click="openDialogFile(requirement)">
                           mdi-folder-edit
                         </v-icon>
@@ -57,7 +58,7 @@
                     <Dialog v-model="dialogFileImg"  :dialogMode="dialogMode"/>
                     <!------------------- end --------------------->
                 <!-- Select user and Date -->
-                <v-card-actions>
+                <v-card-actions    v-if="requirement.status != 'incedent'">
                   <!-- Select user -->
                   <v-select
                     style="margin-top: 23px"
@@ -133,6 +134,7 @@
 import ProjectProvider from "@/resources/ProjectProvider";
 import RequirementProvider from "@/resources/RequirementProvider";
 import UserProvider from "@/resources/UserProvider";
+import ReportProvider from "@/resources/ReportProvider";
 import { getUser } from "@/utils/js/Auth";
 
 import Dnd from "../../../components/dnd/dnd.vue";
@@ -142,6 +144,7 @@ import Dialog from '../components/Dialog'
 const projectService = new ProjectProvider();
 const requirementService = new RequirementProvider();
 const usersService = new UserProvider();
+const ReportService = new ReportProvider();
 
 
 export default {
@@ -233,19 +236,24 @@ export default {
         data: file
       }
     },
-    start(req_Id) {
-      requirementService.updateRequirement(req_Id, {task: 1,})
+    async start(req_Id) {
+      await requirementService.updateRequirement(req_Id, {task: 1,})
       if (this.timerState !== "running") {
         this.tick();
         this.timerState = "running";
       }
     },
-    stop(timer, reqId) {
+    async stop(timer, reqId) {
       window.clearInterval(this.ticker);
       this.currentTimer = 0;
       this.formattedTime = "00:00:00";
       this.timerState = "stopped";
-      console.log('time',timer,'id',reqId);    
+      console.log('time',timer,'id',reqId);   
+      const payload = {
+        requirement: reqId,
+        time: timer
+      }
+      await ReportService.createReport(payload) 
       // ส่ง requirement_id และเวลาลงที่ createReport ใน ReportPovider
     },
     tick: function() {

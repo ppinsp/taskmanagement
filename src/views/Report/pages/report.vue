@@ -28,12 +28,6 @@
             <v-card-actions>
               <v-btn color="success"  v-if="element.status !== 'finished'"  @click.stop="setFinished(element)">Success</v-btn>
               <v-spacer />
-              <div v-if="element.status === 'incident'">
-                <v-btn color="primary" @click.stop="setIncident(element)">Unincident </v-btn>
-              </div>
-              <div v-else>
-                <v-btn color="error" @click.stop="setIncident(element)">incident</v-btn>
-              </div>
             </v-card-actions>
           </v-card>
         </div>
@@ -63,37 +57,37 @@
         </v-toolbar>
           <v-data-table
             hide-default-footer
-            dense
             :headers="headers"
             :items="arrReqT"
             item-key="id"
             class="elevation-1 ma-6"
-          />
+          >
+            <template v-slot:item.actions="{ item }">
+              <div v-if="item.reqArr.status === 'incedent'">
+                <v-btn size="small" color="primary" @click="setReqStatusActive(item)">Inincedent</v-btn>
+              </div>
+              <div v-else>
+                <v-btn size="small" color="warning" @click="setReqStatus(item)">Incedent</v-btn>
+              </div>
+            </template>
+          </v-data-table>
         <v-divider />
       </v-card>
     </v-dialog>
-    <modal-confirm
-    :active="confirm"
-    :confirm-text="`Login`"
-    :title="'Reset Password'"
-    :message="`Please open your email for reset password`"
-    :show-cancel="false"
-    @onConfirm="() => { $router.push({ name: 'Login' })}" />
   </div>
 </template>
 
 <script>
 import ReportProvider from "../../../resources/ReportProvider";
 import ProjectProvider from "../../../resources/ProjectProvider"
-import ModalConfirm from '@/components/ModalConfirm'
+import RequirementProvider from "@/resources/RequirementProvider"
 import { mapActions } from 'vuex'
 
 const ReportService = new ReportProvider();
 const ProjectService = new ProjectProvider();
+const RequirementService = new RequirementProvider();
+
 export default {
-  components: {
-    ModalConfirm
-  },
   data: () => ({
     confirm : false,
     arrReport: [],
@@ -107,6 +101,9 @@ export default {
         value: "reqName",
       },
       { text: "Time", align: "start" ,value: "getTime" },
+      {
+        text: "actions", value: "actions" ,sortable: false
+      }
     ],   
     Time: [],
   }),
@@ -159,6 +156,8 @@ export default {
       const { data } = await ReportService.getReportReq(ProjectId);
       this.arrReqT = data.map((req) => {
         return {
+          projectId: ProjectId,
+          reqArr: req,
           reqName: req.detail,
           getTime: this.timeReqT(req.report)
         }
@@ -173,25 +172,26 @@ export default {
       if (data) {
         this.showReport()
       }
-      console.log(project);
     },
-    async setIncident (project) {
-      const projectId = project.projectId
-      let payload = {}
-      if (project.status === 'active') {
-        payload = {
-          status: 'incident'
-        }
+    async setReqStatus(reqId) {
+      const projectId = reqId.projectId     
+      console.log(reqId);
+      const requirementId = reqId.reqArr.id
+      const payload = {
+        status: 'incedent'
       }
-      else {
-        payload = {
-          status: 'active'
-        }
+      await RequirementService.updateRequirement(requirementId,payload)
+      this.showReportById(projectId)
+    },
+    async setReqStatusActive(reqId) {
+      const projectId = reqId.projectId     
+      console.log(reqId);
+      const requirementId = reqId.reqArr.id
+      const payload = {
+        status: 'active'
       }
-      const { data } = await ProjectService.updateProjectStatus(projectId, payload);
-        if (data) {
-          this.showReport()
-        }
+      await RequirementService.updateRequirement(requirementId,payload)
+      this.showReportById(projectId)
     },
     timeReqT(reports) {
       const reportsTime = reports.map((report) => {
