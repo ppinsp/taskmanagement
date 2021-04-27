@@ -147,7 +147,29 @@
               :list="arrUnitAutomationTest"
               group="tasks"
             >
-              <div
+            <div  
+                v-for="element in arrUnitAutomationTest"
+                :key="element.id"
+              >
+                <v-expansion-panels class="message">
+                  <v-expansion-panel > 
+                      <v-expansion-panel-header>
+                        {{ element.detail }}
+                      </v-expansion-panel-header>
+                      <v-expansion-panel-content>
+                        <div
+                          v-for="review in element.review"
+                          :key="review.id">
+                            <div class="message-box">
+                              <p> comment :{{review.opinion}}</p>
+                              <div class="message-timestamp-left">{{formatTime(review.createdAt)}}</div>
+                            </div>
+                        </div>
+                      </v-expansion-panel-content>
+                    </v-expansion-panel>
+                </v-expansion-panels>
+              </div>
+              <!-- <div
                 class="list-group-item"
                 v-for="element in arrUnitAutomationTest"
                 :key="element.id"
@@ -156,10 +178,15 @@
                   <v-card-text class="mt-1">
                     {{ element.detail }}
                   </v-card-text>
+                  <v-btn icon>
+                    <v-icon>
+                      mdi-comment-text
+                    </v-icon>
+                  </v-btn>
                   <v-card-actions>
                     <div
-                      v-for="(review, index) in element.review"
-                      :key="`review-index-${index}`">
+                      v-for="review in element.review"
+                      :key="review.id">
                       <v-card-text>
                         <v-icon class="mr-2">mdi-account-star</v-icon>
                         {{ review }}
@@ -167,7 +194,7 @@
                     </div>
                   </v-card-actions>
                 </v-card>
-              </div>
+              </div> -->
             </draggable>
           </v-card-text>
         </v-card>
@@ -179,11 +206,14 @@
 <script>
 import draggable from "vuedraggable";
 import StatusProvider from "@/resources/StatusProvider";
+import ComentProvider from "@/resources/CommentProvider";
 import RequirementProvider from "../../resources/RequirementProvider";
+import dayjs from "dayjs"
 import { getUser } from "../../utils/js/Auth";
 
 const StatusService = new StatusProvider();
 const requirementService = new RequirementProvider();
+const comentService = new ComentProvider()
 
 export default {
   props: ["timer", "state"],
@@ -218,7 +248,21 @@ export default {
   methods: {
     async showRequirement() {
       const { data } = await requirementService.getRequirementByUserId(this.user.sub); //ส่งค่าของ user_ID
-      this.arrBacklog = data
+      const fillter = data.filter(req => req.status !== 'incedent')
+      this.arrBacklog = await fillter.map((requirment) => {
+        return {
+          id: requirment.id,
+          detail: requirment.detail,
+          status: requirment.status,
+        }
+      })
+    },
+    async getCommentById(reqId) {
+      const {data} = await comentService.getComment(reqId) 
+      return data
+    },
+    formatTime(time) {
+      return dayjs(time).format(`DD-MM-YYYY`)
     },
     async showInPro() {
       const { data } = await requirementService.getReqInprogress(this.user.sub); //ส่งค่าของ user_ID
@@ -234,12 +278,11 @@ export default {
       this.arrUnitAutomationTest = data
     },
     async updateReqDone(req_id) {
-      await requirementService.updateRequirement(
-        req_id,
-        {
-          task: 2,
-        }
-      );
+      await requirementService.updateRequirement(req_id,{task: 2,});
+      this.showInPro();
+      this.showDone();
+      this.showResultTest();
+      this.showRequirement();
     },
   },
 
@@ -262,8 +305,30 @@ export default {
   },
 };
 </script>
-<style>
+<style lang="scss" scoped>
 .fig-height{
   min-height: 360px;
+}
+.message {
+  border: 1px solid #E0E0E0  ;
+}
+.message-box {
+  position: relative;
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: #A8DDFD;
+  width: 80%;
+  height: 80px;
+  text-align: left;
+  font: 400 .9em 'Open Sans', sans-serif;
+  border: 1px solid #97C6E3;
+  border-radius: 10px;
+  .message-timestamp-left {
+    position: absolute;
+    font-size: .85em;
+    font-weight: 300;
+    bottom: 5px;
+    left: 5px;
+  }
 }
 </style>
