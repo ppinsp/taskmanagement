@@ -159,8 +159,7 @@
                   <v-card-actions>
                     <div
                       v-for="(review, index) in element.review"
-                      :key="`review-index-${index}`"
-                    >
+                      :key="`review-index-${index}`">
                       <v-card-text>
                         <v-icon class="mr-2">mdi-account-star</v-icon>
                         {{ review }}
@@ -218,25 +217,8 @@ export default {
   },
   methods: {
     async showRequirement() {
-      const userId = getUser().sub
-      const { data } = await requirementService.getRequirementByUserId(userId); //ส่งค่าของ user_ID
+      const { data } = await requirementService.getRequirementByUserId(this.user.sub); //ส่งค่าของ user_ID
       this.arrBacklog = data
-      // data.map((n) => {
-      //   if (n.task == null) {
-      //     this.arrBacklog.push({ name: n.detail, id: n.id });
-      //   }
-      // //   else if (n.task == 1) // InProgress
-      // //   {
-      // //     this.arrInProgress.push({ name: n.detail, id: n.id });
-      // //   } else if (n.task == 2) //Done
-      // //   {
-      // //     this.arrDone.push({ name: n.detail, id: n.id});
-      // //   }else if (n.task == 5) // review
-      // //   {
-      // //     const review = n.review.map((review) => review.opinion);
-      // //   this.arrUnitAutomationTest.push({ name: n.detail, review });
-      // //   }
-      // });
     },
     async showInPro() {
       const { data } = await requirementService.getReqInprogress(this.user.sub); //ส่งค่าของ user_ID

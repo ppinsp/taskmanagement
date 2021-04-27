@@ -26,7 +26,7 @@
             </v-card-text>
             <v-divider />
             <v-card-actions>
-              <v-btn color="success"  v-if="element.status !== 'finished'"  @click.stop="setFinished(element)">Success</v-btn>
+              <v-btn color="success"  v-if="element.status === 'finished'"  @click.stop="setFinished(element)">Success</v-btn>
               <v-spacer />
               <div v-if="element.status === 'incident'">
                 <v-btn color="primary" @click.stop="setIncident(element)">Unincident </v-btn>
