@@ -10,11 +10,10 @@
               <div
                 class="list-group-item"
                 v-for="element in arrBacklog"
-                :key="element.name"
-              >
+                :key="element.id">
                 <v-card>
                   <v-card-text class="mt-1">
-                    {{ element.name }}
+                    {{ element.detail }}
                   </v-card-text>
                 </v-card>
               </div>
@@ -31,15 +30,12 @@
               <div
                 class="list-group-item"
                 v-for="element in arrInProgress"
-                :key="element.index"
-              >
+                :key="element.id">
                 <v-card>
                   <v-card-text class="mt-1">
-                    {{ element.name }}
+                    {{ element.detail }}
                   </v-card-text>
-                  <v-divider></v-divider>
-
-
+                  <v-divider />
                   <v-card-actions>
                     <v-row>
                       <v-col>
@@ -51,7 +47,6 @@
                     </v-row>
                     <v-row>
                       <v-col>
-                        
                         <v-btn
                           color="success"
                           fab
@@ -96,11 +91,11 @@
               <div
                 class="list-group-item"
                 v-for="element in arrDone"
-                :key="element.name"
+                :key="element.id"
               >
                 <v-card>
                   <v-card-text class="mt-1">
-                    {{ element.name }}
+                    {{ element.detail }}
                   </v-card-text>
                   <v-card-actions class="justify-center">
                     <div class="my-2">
@@ -155,11 +150,11 @@
               <div
                 class="list-group-item"
                 v-for="element in arrUnitAutomationTest"
-                :key="element.name"
+                :key="element.id"
               >
                 <v-card>
                   <v-card-text class="mt-1">
-                    {{ element.name }}
+                    {{ element.detail }}
                   </v-card-text>
                   <v-card-actions>
                     <div
@@ -207,7 +202,7 @@ export default {
     arrDone: [],
     arrUnitAutomationTest: [],
     dialog: false,
-    user: '',
+    user: {},
   }),
   computed: {
     userId() {
@@ -215,51 +210,46 @@ export default {
     },
   },
   async mounted() {
+    this.user = await getUser();
     this.showInPro();
     this.showDone();
     this.showResultTest();
     this.showRequirement();
-    this.user = getUser();
   },
   methods: {
     async showRequirement() {
-      const { data } = await requirementService.getRequirementByUserId(this.user.sub); //ส่งค่าของ user_ID
-      data.map((n) => {
-        if (n.task == null) {
-          this.arrBacklog.push({ name: n.detail, id: n.id });
-        }
-      //   else if (n.task == 1) // InProgress
-      //   {
-      //     this.arrInProgress.push({ name: n.detail, id: n.id });
-      //   } else if (n.task == 2) //Done
-      //   {
-      //     this.arrDone.push({ name: n.detail, id: n.id});
-      //   }else if (n.task == 5) // review
-      //   {
-      //     const review = n.review.map((review) => review.opinion);
-      //   this.arrUnitAutomationTest.push({ name: n.detail, review });
+      const userId = getUser().sub
+      const { data } = await requirementService.getRequirementByUserId(userId); //ส่งค่าของ user_ID
+      this.arrBacklog = data
+      // data.map((n) => {
+      //   if (n.task == null) {
+      //     this.arrBacklog.push({ name: n.detail, id: n.id });
       //   }
-      });
+      // //   else if (n.task == 1) // InProgress
+      // //   {
+      // //     this.arrInProgress.push({ name: n.detail, id: n.id });
+      // //   } else if (n.task == 2) //Done
+      // //   {
+      // //     this.arrDone.push({ name: n.detail, id: n.id});
+      // //   }else if (n.task == 5) // review
+      // //   {
+      // //     const review = n.review.map((review) => review.opinion);
+      // //   this.arrUnitAutomationTest.push({ name: n.detail, review });
+      // //   }
+      // });
     },
     async showInPro() {
       const { data } = await requirementService.getReqInprogress(this.user.sub); //ส่งค่าของ user_ID
-      data.map((I) => {
-        this.arrInProgress.push({ name: I.detail, id: I.id });
-      });
+      this.arrInProgress = data
     },
 
     async showDone() {
       const { data } = await requirementService.getReqDone(this.user.sub); //ส่งค่าของ user_ID
-      data.map((D) => {
-        this.arrDone.push({ name: D.detail , id: D.id});
-      });
+      this.arrDone = data
     },
     async showResultTest() {
       const { data } = await requirementService.getRepair(this.user.sub); //ส่งค่าของ user_ID
-      data.forEach((R) => {
-        const review = R.review.map((review) => review.opinion);
-        this.arrUnitAutomationTest.push({ name: R.detail, review , id: R.id});
-      });
+      this.arrUnitAutomationTest = data
     },
     async updateReqDone(req_id) {
       await requirementService.updateRequirement(
@@ -280,7 +270,6 @@ export default {
         item.isEdit = false;
         return item;
       });
-      console.log(this.status);
     } catch (err) {
       this.setSnackbar({
         message: err.message,

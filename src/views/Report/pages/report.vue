@@ -5,7 +5,7 @@
         <div
           class="list-group-item"
           v-for="element in arrReport"
-          :key="element.index"
+          :key="element.projectId"
         >
           <v-card
             class="ma-8"
@@ -16,18 +16,24 @@
           >
             <!----------------------- cade of Project name ------------------------->
             <v-card-title
-              class="pb-0 mb-3 justify-center "
+              class="pb-0 mb-3 "
               style="font-family:'Google Sans',Roboto,sans-serif; line-height:1.1; "
             >
-              {{ element.projectName }}
+              {{ element.projectName }} <v-chip color="success" v-if="element.status === 'finished'">Finished</v-chip>
             </v-card-title>
             <v-card-text class="text--secondary rtl">
               TimeAll : {{sumTime(element.requirements)}}
             </v-card-text>
             <v-divider />
             <v-card-actions>
+              <v-btn color="success"  v-if="element.status !== 'finished'"  @click.stop="setFinished(element)">Success</v-btn>
               <v-spacer />
-              <v-btn color="error" :disabled="element.status === 'incident'" @click.stop="setIncident(element.projectId)">incident</v-btn>
+              <div v-if="element.status === 'incident'">
+                <v-btn color="primary" @click.stop="setIncident(element)">Unincident </v-btn>
+              </div>
+              <div v-else>
+                <v-btn color="error" @click.stop="setIncident(element)">incident</v-btn>
+              </div>
             </v-card-actions>
           </v-card>
         </div>
@@ -111,15 +117,16 @@ export default {
     async showReport() {
       this.arrReport = []
       const { data } = await ReportService.getReport();
-      data.map((project) => {
-        this.arrReport.push({
+      const setReport = data.map((project) => {
+        return {
           projectName: project.name,
           projectId: project.id,
           arrData: project,
           requirements: project.requirements,
           status: project.status
-        });
-      });
+        }
+      })
+      this.arrReport = setReport
     },
     ...mapActions({
       setSnackbar: 'Style/setSnackbar'
@@ -157,20 +164,34 @@ export default {
         }
       })
     },
-    async setIncident (projectId) {
-      this.modalConfirm =true
+    async setFinished (project) {
+      const projectId = project.projectId
       const payload = {
-        status: 'incident'
+        status: 'finished'
       }
       const { data } = await ProjectService.updateProjectStatus(projectId, payload);
       if (data) {
         this.showReport()
-        this.setSnackbar({
-          message: 'Update Status Project Success',
-          type: 'success',
-          active: true
-        })
       }
+      console.log(project);
+    },
+    async setIncident (project) {
+      const projectId = project.projectId
+      let payload = {}
+      if (project.status === 'active') {
+        payload = {
+          status: 'incident'
+        }
+      }
+      else {
+        payload = {
+          status: 'active'
+        }
+      }
+      const { data } = await ProjectService.updateProjectStatus(projectId, payload);
+        if (data) {
+          this.showReport()
+        }
     },
     timeReqT(reports) {
       const reportsTime = reports.map((report) => {

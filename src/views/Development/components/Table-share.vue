@@ -83,7 +83,6 @@ export default {
     async getMessage() {
       const { data } = await chatService.getChat();
       this.messages = data
-      console.log('this.message',this.messages);
     },
     async sendMessage() {
       const {message} = await chatService.createChat({ massages: this.text });
