@@ -71,13 +71,8 @@
                       </v-col>
                     </v-row>
                   </v-card-actions>
-
-
-
                 </v-card>
               </div>
-
-
             </draggable>
           </v-card-text>
         </v-card>
@@ -158,10 +153,10 @@
                       </v-expansion-panel-header>
                       <v-expansion-panel-content>
                         <div
-                          v-for="review in element.review"
+                          v-for="review in element.comment"
                           :key="review.id">
                             <div class="message-box">
-                              <p> comment :{{review.opinion}}</p>
+                              <p> comment :{{review.comment}}</p>
                               <div class="message-timestamp-left">{{formatTime(review.createdAt)}}</div>
                             </div>
                         </div>
@@ -276,6 +271,7 @@ export default {
     async showResultTest() {
       const { data } = await requirementService.getRepair(this.user.sub); //ส่งค่าของ user_ID
       this.arrUnitAutomationTest = data
+      console.log(data);
     },
     async updateReqDone(req_id) {
       await requirementService.updateRequirement(req_id,{task: 2,});
