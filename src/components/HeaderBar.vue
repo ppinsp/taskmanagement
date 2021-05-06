@@ -41,6 +41,7 @@
         </v-list-item>
       </v-list>
     </v-menu>
+    <div class="ml-2">  {{userData.username}}</div>
   </v-app-bar>
 </template>
 

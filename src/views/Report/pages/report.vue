@@ -19,13 +19,14 @@
               class="pb-0 mb-3 "
               style="font-family:'Google Sans',Roboto,sans-serif; line-height:1.1; "
             >
-              {{ element.projectName }} <v-chip color="success" v-if="element.status === 'finished'">Finished</v-chip>
+              {{ element.projectName }}
             </v-card-title>
             <v-card-text class="text--secondary rtl">
               TimeAll : {{sumTime(element.requirements)}}
             </v-card-text>
             <v-divider />
             <v-card-actions>
+              <v-chip color="success" v-if="element.status === 'finished'">Finished</v-chip>
               <v-btn color="success"  v-if="element.status !== 'finished'"  @click.stop="setFinished(element)">Success</v-btn>
               <v-spacer />
             </v-card-actions>
