@@ -3,7 +3,7 @@
     <div class="row">
       <!------------- - card backlog -------------->
       <div class="col-md-3">
-        <v-card color="#E0F7FA">
+        <v-card color="#E0F7FA" class="inprogress-wrapper">
           <v-card-title>Backlog</v-card-title>
           <v-card-text class="text--primary">
             <draggable class="v-list-group fig-height" :list="arrBacklog" group="tasks">
@@ -23,7 +23,7 @@
       </div>
       <!-------------- card InProgress -------------->
       <div class="col-md-3">
-        <v-card>
+        <v-card class="inprogress-wrapper">
           <v-card-title>InProgress</v-card-title>
           <v-card-text class="text--primary">
             <draggable class="v-list-group fig-height" :list="arrInProgress" group="tasks">
@@ -79,7 +79,7 @@
       </div>
       <!-------------- card Done -------------->
       <div class="col-md-3">
-        <v-card>
+        <v-card class="inprogress-wrapper">
           <v-card-title>Done</v-card-title>
           <v-card-text class="text--primary">
             <draggable class="v-list-group fig-height" :list="arrDone" group="tasks">
@@ -134,7 +134,7 @@
       <!-- end card -->
       <!------------- - card UAT -------------->
       <div class="col-md-3">
-        <v-card>
+        <v-card class="inprogress-wrapper">
           <v-card-title>Result Test</v-card-title>
           <v-card-text class="text--primary">
             <draggable
@@ -302,6 +302,11 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+.inprogress-wrapper{
+  height: 60vh;
+  overflow: scroll;
+  overflow-x: hidden;
+}
 .fig-height{
   min-height: 360px;
 }
