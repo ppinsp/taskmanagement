@@ -237,22 +237,23 @@ export default {
       }
     },
     async start(req_Id) {
-      await requirementService.updateRequirement(req_Id, {task: 1,})
+      const data = await requirementService.updateRequirement(req_Id, {task: 1,})
+      console.log('start',data);
       if (this.timerState !== "running") {
         this.tick();
         this.timerState = "running";
       }
     },
     async stop(timer, reqId) {
-      window.clearInterval(this.ticker);
+      await window.clearInterval(this.ticker);
       this.currentTimer = 0;
       this.formattedTime = "00:00:00";
       this.timerState = "stopped";
-      console.log('time',timer,'id',reqId);   
       const payload = {
         requirement: reqId,
         time: timer
       }
+      console.log('payload',payload);
       await ReportService.createReport(payload) 
       // ส่ง requirement_id และเวลาลงที่ createReport ใน ReportPovider
     },
