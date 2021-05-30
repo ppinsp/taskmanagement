@@ -23,7 +23,7 @@
             </v-card-title>
             <v-card-text class="text--secondary rtl">
               TimeAll : {{sumTime(element.requirements)}}<br>
-              TimeLeft : {{alertDate(element.projectId)}}
+              TimeLeft : {{alertDate(element)}}
             </v-card-text>
             <v-divider />
             <v-card-actions>
@@ -165,7 +165,6 @@ export default {
           reqArr: req,
           reqName: req.detail,
           getTime: this.timeReqT(req.report)
-         
         }
       })
     },
@@ -220,10 +219,10 @@ export default {
       second = parseInt(second%60);
       return +hour+':'+minute+':'+second
     },
-    alertDate(data){
+    alertDate(project){
       const deadline = new Date('2018-06-01 22:45'); 
-      console.log(data)
-      console.log("check deadline ",this.datab[data].status);
+      console.log('this.datab',project);
+      // console.log("check deadline ",this.datab[data]?.status);
       //var diff = Math.abs(date.getTime());
     
 
