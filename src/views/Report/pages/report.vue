@@ -81,9 +81,10 @@
 
 <script>
 import ReportProvider from "../../../resources/ReportProvider";
-import ProjectProvider from "../../../resources/ProjectProvider"
-import RequirementProvider from "@/resources/RequirementProvider"
-import { mapActions } from 'vuex'
+import ProjectProvider from "../../../resources/ProjectProvider";
+import RequirementProvider from "@/resources/RequirementProvider";
+import { mapActions } from 'vuex';
+import moment from 'moment'
 
 const ReportService = new ReportProvider();
 const ProjectService = new ProjectProvider();
@@ -122,9 +123,9 @@ export default {
           projectName: project.name,
           projectId: project.id,
           arrData: project,
-          deadlinedate: project.deadline_date,
+          deadlinedate: project.deadlineDate,
           requirements: project.requirements,
-          status: project.status
+          status: project.status,
         }
       })
       this.arrReport = setReport
@@ -220,8 +221,21 @@ export default {
       return +hour+':'+minute+':'+second
     },
     alertDate(project){
-      const deadline = new Date('2018-06-01 22:45'); 
-      console.log('this.datab',project);
+      const now = moment(new Date());
+      const deadline = moment(project.deadlinedate).utc();
+      const duration = deadline.diff(now, 'hours')
+      // เหลือเวลาไม่ถึง 24 ชั่วโมง
+      if (duration > 0 && duration < 25 ) {
+        return `${duration} hours`
+      }
+      //มีเวลาเหลือมากกว่า 24 ชั่วโมง
+      else if (duration > 24) {
+        return  `${deadline.locale('th').fromNow()}`
+      }
+      //เลยวัน เดดไลน์
+      else {
+        return  `${deadline.locale('th').fromNow()} `
+      }
       // console.log("check deadline ",this.datab[data]?.status);
       //var diff = Math.abs(date.getTime());
     
@@ -233,8 +247,6 @@ export default {
       //var years = Math.floor(diff / (365*60*60*24));
       //var months = Math.floor((diff - years * 365*60*60*24) / (30*60*60*24));
       //var days = Math.floor((diff - years * 365*60*60*24 - months*30*60*60*24)/ (60*60*24));
-
-      return deadline;
     },
     currentDate() {
       const current = new Date();
