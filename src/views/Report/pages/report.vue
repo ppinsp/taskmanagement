@@ -22,7 +22,8 @@
               {{ element.projectName }}
             </v-card-title>
             <v-card-text class="text--secondary rtl">
-              TimeAll : {{sumTime(element.requirements)}}
+              TimeAll : {{sumTime(element.requirements)}}<br>
+              TimeLeft : {{alertDate(element.projectId)}}
             </v-card-text>
             <v-divider />
             <v-card-actions>
@@ -94,6 +95,7 @@ export default {
     arrReport: [],
     dialog: false,
     arrReqT: [],
+    datab: [],
     headers: [
       {
         text: "Requirement",
@@ -120,11 +122,13 @@ export default {
           projectName: project.name,
           projectId: project.id,
           arrData: project,
+          deadlinedate: project.deadline_date,
           requirements: project.requirements,
           status: project.status
         }
       })
       this.arrReport = setReport
+      this.datab = data
     },
     ...mapActions({
       setSnackbar: 'Style/setSnackbar'
@@ -161,6 +165,7 @@ export default {
           reqArr: req,
           reqName: req.detail,
           getTime: this.timeReqT(req.report)
+         
         }
       })
     },
@@ -214,6 +219,31 @@ export default {
       minute =parseInt( minute + second/60);
       second = parseInt(second%60);
       return +hour+':'+minute+':'+second
+    },
+    alertDate(data){
+      const deadline = new Date('2018-06-01 22:45'); 
+      console.log(data)
+      console.log("check deadline ",this.datab[data].status);
+      //var diff = Math.abs(date.getTime());
+    
+
+      // diff = diff.toString();
+      // diff = diff.substring(0,diff.length-3);
+      // diff = Number(diff);
+      // console.log(diff);
+      //var years = Math.floor(diff / (365*60*60*24));
+      //var months = Math.floor((diff - years * 365*60*60*24) / (30*60*60*24));
+      //var days = Math.floor((diff - years * 365*60*60*24 - months*30*60*60*24)/ (60*60*24));
+
+      return deadline;
+    },
+    currentDate() {
+      const current = new Date();
+      //const date = current.getFullYear()+'-'+(current.getMonth()+1)+'-'+current.getDate();
+      //const time = current.getHours() + ":" + current.getMinutes() + ":" + current.getSeconds();
+      //const dateTime = date;
+      
+      return current.getTime();
     },
     closeDialog() {
       this.dialog = false

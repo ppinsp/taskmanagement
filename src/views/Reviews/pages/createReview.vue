@@ -207,7 +207,7 @@
       <!------------- - card UAT -------------->
       <div class="col-md-3">
         <v-card>
-          <v-card-title>Pre Production</v-card-title>
+          <v-card-title>Production</v-card-title>
           <v-card-text class="text--primary">
             <draggable
               class="v-list-group fig-height"
